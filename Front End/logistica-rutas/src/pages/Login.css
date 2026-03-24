@@ -1,0 +1,273 @@
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* LEFT PANEL (Gradient Background) */
+.login-left-panel {
+  flex: 1;
+  background: linear-gradient(135deg, #09b4db 0%, #0ebb8d 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.left-panel-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 600px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: auto; /* Pushes hero text to center vertically if we want, or adjust margin */
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.hero-text {
+  margin-top: 25vh;
+  margin-bottom: auto;
+}
+
+.hero-text h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.hero-text p {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+.features-footer {
+  display: flex;
+  gap: 2rem;
+  margin-top: auto;
+  font-size: 0.95rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feature-icon {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* RIGHT PANEL (Form) */
+.login-right-panel {
+  flex: 1;
+  background-color: #ffffff;
+  color: #111827;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.login-form-wrapper {
+  width: 100%;
+  max-width: 440px;
+  padding: 2rem;
+}
+
+.form-header {
+  margin-bottom: 2.5rem;
+}
+
+.form-header h2 {
+  font-size: 2rem;
+  color: #111827;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-header p {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-group input {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background-color: #f3f4f6;
+  font-size: 0.95rem;
+  color: #111827;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #0ba3e1;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(11, 163, 225, 0.15);
+}
+
+.form-group input::placeholder {
+  color: #9ca3af;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #4b5563;
+}
+
+.remember-me input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #0ba3e1;
+}
+
+.forgot-password {
+  color: #0ba3e1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.login-button {
+  background-color: #0ba3e1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.875rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.login-button:hover {
+  background-color: #098cbd;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 2.5rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.register-link a {
+  color: #0ba3e1;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+.help-icon {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #1f2937;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.help-icon:hover {
+  transform: scale(1.05);
+  background-color: #111827;
+}
+
+/* Responsiveness */
+@media (max-width: 900px) {
+  .login-container {
+    flex-direction: column;
+  }
+  
+  .login-left-panel {
+    padding: 2rem;
+    min-height: 40vh;
+    flex: none;
+  }
+  
+  .hero-text {
+    margin-top: 2rem;
+  }
+  
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+  
+  .login-right-panel {
+    padding: 2rem 1rem;
+    align-items: flex-start;
+  }
+}
