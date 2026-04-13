@@ -1,6 +1,6 @@
 package com.logistica.logistica_urbana.infrastructure.persistence.repository;
 
-import com.logistica.logistica_urbana.domain.model.Vehiculo;
+import com.logistica.logistica_urbana.domain.model.entities.Vehiculo;
 import com.logistica.logistica_urbana.domain.model.enums.TipoPropulsion;
 import com.logistica.logistica_urbana.domain.port.VehiculoReadRepository;
 import com.logistica.logistica_urbana.infrastructure.persistence.entity.VehiculoEntity;

@@ -9,18 +9,15 @@ import com.logistica.logistica_urbana.application.dto.response.MarcaResponseDTO;
 import com.logistica.logistica_urbana.application.dto.response.ModeloResponseDTO;
 import com.logistica.logistica_urbana.application.dto.response.VehiculoResponseDTO;
 import com.logistica.logistica_urbana.domain.exception.VehiculoNoEncontradoException;
-import com.logistica.logistica_urbana.domain.model.PropulsionElectrica;
-import com.logistica.logistica_urbana.domain.model.PropulsionHibrida;
-import com.logistica.logistica_urbana.domain.model.PropulsionInfo;
-import com.logistica.logistica_urbana.domain.model.PropulsionTermica;
-import com.logistica.logistica_urbana.domain.model.Vehiculo;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionElectrica;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionHibrida;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionInfo;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionTermica;
+import com.logistica.logistica_urbana.domain.model.entities.Vehiculo;
 import com.logistica.logistica_urbana.domain.model.enums.TipoPropulsion;
 import com.logistica.logistica_urbana.domain.model.valueobjects.PesoCarga;
 import com.logistica.logistica_urbana.domain.port.VehiculoReadRepository;
 import com.logistica.logistica_urbana.domain.port.VehiculoWriteRepository;
-import com.logistica.logistica_urbana.infrastructure.persistence.entity.MarcaEntity;
-import com.logistica.logistica_urbana.infrastructure.persistence.entity.ModeloEntity;
-import com.logistica.logistica_urbana.infrastructure.persistence.entity.VehiculoEntity;
 import com.logistica.logistica_urbana.infrastructure.persistence.repository.MarcaJpaRepository;
 import com.logistica.logistica_urbana.infrastructure.persistence.repository.ModeloJpaRepository;
 import com.logistica.logistica_urbana.infrastructure.persistence.repository.VehiculoJpaRepository;
@@ -53,7 +50,7 @@ public class VehiculoService {
     private final VehiculoWriteRepository writeRepository;
 
     // Los catálogos se consultan directamente desde la capa de aplicación
-    // ya que son operaciones de solo lectura sin lógica de dominio.
+    //, ya que son operaciones de solo lectura sin lógica de dominio.
     private final MarcaJpaRepository marcaJpaRepository;
     private final ModeloJpaRepository modeloJpaRepository;
     private final VehiculoJpaRepository vehiculoJpaRepository;
@@ -284,7 +281,7 @@ public class VehiculoService {
      * de vehículo para la serialización en la respuesta REST.</p>
      *
      * @param vehiculo entidad de dominio completamente hidratada
-     * @return DTO de respuesta listo para serializar
+     * @return DTO de respuesta lista para serializar
      */
     private VehiculoResponseDTO toResponseDTO(Vehiculo vehiculo) {
         return VehiculoResponseDTO.builder()

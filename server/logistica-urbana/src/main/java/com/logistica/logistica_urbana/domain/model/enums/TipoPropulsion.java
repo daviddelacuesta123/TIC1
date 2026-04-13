@@ -1,14 +1,16 @@
 package com.logistica.logistica_urbana.domain.model.enums;
 
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionInfo;
+
 /**
  * Tipos de sistema de propulsión disponibles en la flota de vehículos.
  *
- * <p>Discriminador principal del patrón Strategy implementado por {@link com.logistica.logistica_urbana.domain.model.PropulsionInfo}.
+ * <p>Discriminador principal del patrón Strategy implementado por {@link PropulsionInfo}.
  * Cada valor corresponde a una implementación concreta del cálculo de costo energético.</p>
  *
  * @author Equipo de alto desempeño N-2
  * @version 1.0
- * @see com.logistica.logistica_urbana.domain.model.PropulsionInfo
+ * @see PropulsionInfo
  */
 public enum TipoPropulsion {
 

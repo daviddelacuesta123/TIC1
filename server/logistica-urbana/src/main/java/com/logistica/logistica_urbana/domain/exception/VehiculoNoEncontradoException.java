@@ -1,7 +1,9 @@
 package com.logistica.logistica_urbana.domain.exception;
 
+import com.logistica.logistica_urbana.domain.model.entities.Vehiculo;
+
 /**
- * Se lanza cuando no existe un {@link com.logistica.logistica_urbana.domain.model.Vehiculo}
+ * Se lanza cuando no existe un {@link Vehiculo}
  * con el identificador solicitado.
  *
  * <p>Excepción de dominio tipada. El manejador global de errores la mapea a {@code HTTP 404}.</p>

@@ -1,4 +1,4 @@
-package com.logistica.logistica_urbana.domain.model;
+package com.logistica.logistica_urbana.domain.model.entities;
 
 import com.logistica.logistica_urbana.domain.model.enums.TipoPropulsion;
 import com.logistica.logistica_urbana.domain.model.valueobjects.ParametrosCosto;

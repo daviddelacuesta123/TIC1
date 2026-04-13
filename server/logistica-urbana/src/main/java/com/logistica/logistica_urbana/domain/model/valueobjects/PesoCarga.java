@@ -1,5 +1,7 @@
 package com.logistica.logistica_urbana.domain.model.valueobjects;
 
+import com.logistica.logistica_urbana.domain.model.entities.Vehiculo;
+
 import java.util.Objects;
 
 /**
@@ -15,7 +17,7 @@ import java.util.Objects;
  *
  * @author Equipo de alto desempeño N-2
  * @version 1.0
- * @see com.logistica.logistica_urbana.domain.model.Vehiculo
+ * @see Vehiculo
  */
 public final class PesoCarga {
 
