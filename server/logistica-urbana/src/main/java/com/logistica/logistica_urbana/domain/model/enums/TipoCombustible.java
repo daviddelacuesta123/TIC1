@@ -1,5 +1,7 @@
 package com.logistica.logistica_urbana.domain.model.enums;
 
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionTermica;
+
 /**
  * Tipos de combustible utilizados por vehículos con propulsión térmica o híbrida.
  *
@@ -8,7 +10,7 @@ package com.logistica.logistica_urbana.domain.model.enums;
  *
  * @author Equipo de alto desempeño N-2
  * @version 1.0
- * @see com.logistica.logistica_urbana.domain.model.PropulsionTermica
+ * @see PropulsionTermica
  */
 public enum TipoCombustible {
 

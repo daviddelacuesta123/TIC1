@@ -1,5 +1,6 @@
 package com.logistica.logistica_urbana.domain.model.valueobjects;
 
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionInfo;
 import com.logistica.logistica_urbana.domain.model.enums.TipoPropulsion;
 
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.Objects;
  *
  * @author Equipo de alto desempeño N-2
  * @version 1.0
- * @see com.logistica.logistica_urbana.domain.model.PropulsionInfo
+ * @see PropulsionInfo
  */
 public final class ParametrosCosto {
 

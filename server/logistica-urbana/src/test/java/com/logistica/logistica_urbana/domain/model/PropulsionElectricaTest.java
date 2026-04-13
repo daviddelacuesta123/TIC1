@@ -1,5 +1,6 @@
 package com.logistica.logistica_urbana.domain.model;
 
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionElectrica;
 import com.logistica.logistica_urbana.domain.model.enums.TipoPropulsion;
 import com.logistica.logistica_urbana.domain.model.valueobjects.ParametrosCosto;
 import org.junit.jupiter.api.BeforeEach;

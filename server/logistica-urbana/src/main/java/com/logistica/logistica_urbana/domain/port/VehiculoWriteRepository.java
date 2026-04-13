@@ -1,6 +1,6 @@
 package com.logistica.logistica_urbana.domain.port;
 
-import com.logistica.logistica_urbana.domain.model.Vehiculo;
+import com.logistica.logistica_urbana.domain.model.entities.Vehiculo;
 
 /**
  * Puerto de escritura segregado para el repositorio de vehículos.

@@ -1,8 +1,10 @@
 package com.logistica.logistica_urbana.domain.exception;
 
+import com.logistica.logistica_urbana.domain.model.entities.Vehiculo;
+
 /**
  * Se lanza cuando se intenta realizar una operación sobre un
- * {@link com.logistica.logistica_urbana.domain.model.Vehiculo} que ha sido dado de baja.
+ * {@link Vehiculo} que ha sido dado de baja.
  *
  * <p>Ejemplo: intentar asignar una ruta a un vehículo cuyo campo {@code activo} es {@code false}.</p>
  *

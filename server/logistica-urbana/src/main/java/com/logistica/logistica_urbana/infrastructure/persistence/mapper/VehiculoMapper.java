@@ -1,11 +1,10 @@
 package com.logistica.logistica_urbana.infrastructure.persistence.mapper;
 
-import com.logistica.logistica_urbana.domain.model.PropulsionElectrica;
-import com.logistica.logistica_urbana.domain.model.PropulsionHibrida;
-import com.logistica.logistica_urbana.domain.model.PropulsionInfo;
-import com.logistica.logistica_urbana.domain.model.PropulsionTermica;
-import com.logistica.logistica_urbana.domain.model.Vehiculo;
-import com.logistica.logistica_urbana.domain.model.enums.TipoPropulsion;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionElectrica;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionHibrida;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionInfo;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionTermica;
+import com.logistica.logistica_urbana.domain.model.entities.Vehiculo;
 import com.logistica.logistica_urbana.domain.model.valueobjects.PesoCarga;
 import com.logistica.logistica_urbana.infrastructure.persistence.entity.PropulsionElectricaEntity;
 import com.logistica.logistica_urbana.infrastructure.persistence.entity.PropulsionTermicaEntity;

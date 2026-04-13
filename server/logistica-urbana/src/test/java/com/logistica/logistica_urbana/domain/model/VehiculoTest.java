@@ -1,5 +1,8 @@
 package com.logistica.logistica_urbana.domain.model;
 
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionElectrica;
+import com.logistica.logistica_urbana.domain.model.entities.PropulsionTermica;
+import com.logistica.logistica_urbana.domain.model.entities.Vehiculo;
 import com.logistica.logistica_urbana.domain.model.enums.TipoCombustible;
 import com.logistica.logistica_urbana.domain.model.enums.TipoPropulsion;
 import com.logistica.logistica_urbana.domain.model.valueobjects.ParametrosCosto;

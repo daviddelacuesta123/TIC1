@@ -6,39 +6,41 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * Configuración temporal de seguridad para el Sprint 1 (CRUD de Vehículos).
- *
- * <p>Permite todas las peticiones mientras no se implemente la autenticación JWT.
- * Se reemplazará en el Sprint 1 — Funcionalidad 1 (Autenticación) con:
- * filtro JWT, roles {@code GESTOR} y {@code REPARTIDOR}, y reglas de autorización
- * por endpoint definidas en el contrato de la API.</p>
- *
- * @author Equipo de alto desempeño N-2
- * @version 1.0
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    /**
-     * Cadena de filtros de seguridad que permite todas las peticiones sin autenticación.
-     *
-     * <p>Se deshabilita CSRF ya que la API es stateless (JWT).
-     * Las sesiones de servidor se desactivan — cada petición debe ser autocontenida.</p>
-     *
-     * @param http configurador de seguridad HTTP de Spring Security
-     * @return cadena de filtros configurada
-     * @throws Exception si la configuración falla durante la inicialización
-     */
+    private final JwtAuthenticationFilter jwtAuthFilter;
+
+    // Inyectamos el filtro que creamos anteriormente
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        // El login DEBE ser público para poder entrar
+                        .requestMatchers("/auth/login").permitAll()
+                        // El registro y el resto requieren que el filtro JWT valide quién eres
+                        .anyRequest().authenticated()
+                )
+                // ESTA ES LA LÍNEA CLAVE: Ponemos nuestro filtro antes del filtro de usuario/password
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
