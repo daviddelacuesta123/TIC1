@@ -1,40 +1,22 @@
 import { useState } from 'react'
+import { AuthProvider, useAuth } from './context/AuthContext'
 import Sidebar from './components/layout/Sidebar'
 import Header from './components/layout/Header'
 import Dashboard from './pages/Dashboard'
 import Shipments from './pages/Shipments'
 import RouteMap from './pages/RouteMap'
 import Login from './pages/Login'
-import Register from './pages/Register'
 import NewRoute from './pages/NewRoute'
 import './App.css'
 
 export type Page = 'dashboard' | 'shipments' | 'routes' | 'new-route'
-type AuthView = 'login' | 'register'
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [authView, setAuthView] = useState<AuthView>('login')
+function AppContent() {
+  const { user } = useAuth()
   const [currentPage, setCurrentPage] = useState<Page>('dashboard')
 
-  if (!isAuthenticated) {
-    if (authView === 'register') {
-      return (
-        <Register
-          onRegister={() => {
-            setIsAuthenticated(true)
-            setAuthView('login')
-          }}
-          onGoToLogin={() => setAuthView('login')}
-        />
-      )
-    }
-    return (
-      <Login
-        onLogin={() => setIsAuthenticated(true)}
-        onGoToRegister={() => setAuthView('register')}
-      />
-    )
+  if (!user) {
+    return <Login />
   }
 
   return (
@@ -50,6 +32,14 @@ function App() {
         </div>
       </main>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
