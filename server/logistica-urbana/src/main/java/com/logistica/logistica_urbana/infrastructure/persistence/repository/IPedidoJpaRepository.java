@@ -1,6 +1,6 @@
-package main.java.com.logistica.logistica_urbana.infrastructure.persistence.repository;
+package com.logistica.logistica_urbana.infrastructure.persistence.repository;
 
-import main.java.com.logistica.logistica_urbana.infrastructure.persistence.entity.PedidoEntity;
+import com.logistica.logistica_urbana.infrastructure.persistence.entity.PedidoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

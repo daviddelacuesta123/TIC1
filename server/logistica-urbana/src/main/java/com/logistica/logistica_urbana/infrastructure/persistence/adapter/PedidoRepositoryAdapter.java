@@ -1,4 +1,4 @@
-package main.java.com.logistica.logistica_urbana.infrastructure.persistence.adapter;
+package com.logistica.logistica_urbana.infrastructure.persistence.adapter;
 
 import com.logistica.logistica_urbana.domain.model.entities.Pedido;
 import com.logistica.logistica_urbana.domain.port.IPedidoRepositoryPort;

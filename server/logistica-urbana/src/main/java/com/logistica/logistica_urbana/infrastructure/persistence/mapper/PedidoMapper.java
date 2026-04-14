@@ -1,7 +1,7 @@
-package main.java.com.logistica.logistica_urbana.infrastructure.persistence.mapper;
+package com.logistica.logistica_urbana.infrastructure.persistence.mapper;
 
-import main.java.com.logistica.logistica_urbana.domain.model.entities.Pedido;
-import main.java.com.logistica.logistica_urbana.infrastructure.persistence.entity.PedidoEntity;
+import com.logistica.logistica_urbana.domain.model.entities.Pedido;
+import com.logistica.logistica_urbana.infrastructure.persistence.entity.PedidoEntity;
 import org.springframework.stereotype.Component;
 
 @Component

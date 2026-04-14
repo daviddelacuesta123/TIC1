@@ -1,4 +1,4 @@
-package main.java.com.logistica.logistica_urbana.domain.model.entities;
+package com.logistica.logistica_urbana.domain.model.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

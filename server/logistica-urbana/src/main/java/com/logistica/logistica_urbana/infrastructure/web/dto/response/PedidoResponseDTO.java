@@ -1,4 +1,4 @@
-package main.java.com.logistica.logistica_urbana.infrastructure.web.dto.response;
+package com.logistica.logistica_urbana.infrastructure.web.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

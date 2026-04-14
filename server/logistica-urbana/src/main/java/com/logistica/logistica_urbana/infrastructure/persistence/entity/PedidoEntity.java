@@ -1,4 +1,4 @@
-package main.java.com.logistica.logistica_urbana.infrastructure.persistence.entity;
+package com.logistica.logistica_urbana.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

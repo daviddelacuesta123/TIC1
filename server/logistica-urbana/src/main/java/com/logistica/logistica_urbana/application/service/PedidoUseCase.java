@@ -1,7 +1,7 @@
-package main.java.com.logistica.logistica_urbana.application.service;
+package com.logistica.logistica_urbana.application.service;
 
-import main.java.com.logistica.logistica_urbana.domain.model.entities.Pedido;
-import main.java.com.logistica.logistica_urbana.domain.port.IPedidoRepositoryPort;
+import com.logistica.logistica_urbana.domain.model.entities.Pedido;
+import com.logistica.logistica_urbana.domain.port.IPedidoRepositoryPort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

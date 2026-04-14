@@ -1,4 +1,4 @@
-package main.java.com.logistica.logistica_urbana.infrastructure.web.dto.request;
+package com.logistica.logistica_urbana.infrastructure.web.dto.request;
 
 import lombok.Data;
 
