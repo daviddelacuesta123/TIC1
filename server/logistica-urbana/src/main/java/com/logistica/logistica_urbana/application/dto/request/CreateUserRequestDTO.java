@@ -2,7 +2,7 @@ package com.logistica.logistica_urbana.application.dto.request;
 
 import com.logistica.logistica_urbana.domain.model.enums.Rol;
 
-public class CreateUserRequest {
+public class CreateUserRequestDTO {
 
     private String username;
     private String password;

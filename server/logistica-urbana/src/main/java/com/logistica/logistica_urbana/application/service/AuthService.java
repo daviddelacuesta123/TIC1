@@ -1,5 +1,6 @@
 package com.logistica.logistica_urbana.application.service;
 
+import com.logistica.logistica_urbana.application.dto.response.CreateUserResponseDTO;
 import com.logistica.logistica_urbana.domain.model.entities.Usuario;
 import com.logistica.logistica_urbana.domain.model.enums.Rol;
 import com.logistica.logistica_urbana.domain.port.UsuarioRepository;
@@ -39,7 +40,7 @@ public class AuthService {
 
     }
 
-    public Usuario crearUsuario(String username, String password, Rol rol) {
+    public CreateUserResponseDTO crearUsuario (String username, String password, Rol rol) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String rolDelAdmin = auth.getAuthorities().toString();
 
@@ -58,7 +59,10 @@ public class AuthService {
                 rol
         );
 
-        return usuarioRepository.save(usuario);
+        usuarioRepository.save(usuario);
+
+        return new CreateUserResponseDTO(usuario.getId(), usuario.getUsername(),
+                usuario.getRol(), usuario.isActivo());
     }
 
 }
