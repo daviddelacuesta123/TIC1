@@ -31,6 +31,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
         <li className={currentPage === 'dashboard' ? 'active' : ''} onClick={() => onNavigate('dashboard')}>Dashboard</li>
         <li className={currentPage === 'shipments' ? 'active' : ''} onClick={() => onNavigate('shipments')}>Shipments</li>
         <li className={currentPage === 'routes' ? 'active' : ''} onClick={() => onNavigate('routes')}>Routes Map</li>
+        <li className={currentPage === 'vehicles' ? 'active' : ''} onClick={() => onNavigate('vehicles')}>Vehicles</li>
       </ul>
     </nav>
   )

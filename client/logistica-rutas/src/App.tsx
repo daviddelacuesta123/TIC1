@@ -7,9 +7,10 @@ import RouteMap from './pages/RouteMap'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NewRoute from './pages/NewRoute'
+import Vehicles from './pages/Vehicles'
 import './App.css'
 
-export type Page = 'dashboard' | 'shipments' | 'routes' | 'new-route'
+export type Page = 'dashboard' | 'shipments' | 'routes' | 'new-route' | 'vehicles'
 type AuthView = 'login' | 'register'
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
           {currentPage === 'shipments' && <Shipments />}
           {currentPage === 'routes' && <RouteMap onNavigate={setCurrentPage} />}
           {currentPage === 'new-route' && <NewRoute onNavigate={setCurrentPage} />}
+          {currentPage === 'vehicles' && <Vehicles />}
         </div>
       </main>
     </div>
