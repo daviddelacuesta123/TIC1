@@ -8,21 +8,33 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "pedidos")
+@Table(name = "pedido")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PedidoEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pedido")
     private Long id;
-    
+
+    @Column(name = "id_destinatario", nullable = false)
+    private Integer idDestinatario;
+
+    @Column(name = "id_direccion", nullable = false)
+    private Integer idDireccion;
+
+    @Column(name = "peso_total", nullable = false)
+    private Double pesoTotal;
+
+    @Column(name = "volumen_total", nullable = false)
+    private Double volumenTotal;
+
+    @Column(name = "estado", nullable = false, length = 30)
     private String estado;
-    private Double peso;
-    private Double volumen;
-    private String direccionEntrega;
-    private Double latitud;
-    private Double longitud;
+
+    @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
 }

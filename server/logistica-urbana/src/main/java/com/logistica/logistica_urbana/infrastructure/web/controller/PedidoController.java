@@ -25,11 +25,10 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> crearPedido(@RequestBody PedidoRequestDTO requestDTO) {
         Pedido pedido = Pedido.builder()
-                .peso(requestDTO.getPeso())
-                .volumen(requestDTO.getVolumen())
-                .direccionEntrega(requestDTO.getDireccionEntrega())
-                .latitud(requestDTO.getLatitud())
-                .longitud(requestDTO.getLongitud())
+                .idDestinatario(requestDTO.getIdDestinatario())
+                .idDireccion(requestDTO.getIdDireccion())
+                .pesoTotal(requestDTO.getPesoTotal())
+                .volumenTotal(requestDTO.getVolumenTotal())
                 .build();
                 
         Pedido creado = pedidoUseCase.crearPedido(pedido);
@@ -53,12 +52,11 @@ public class PedidoController {
     @PutMapping("/{id}")
     public ResponseEntity<PedidoResponseDTO> actualizarPedido(@PathVariable Long id, @RequestBody PedidoRequestDTO requestDTO) {
         Pedido pedido = Pedido.builder()
-                .estado("MODIFICADO")
-                .peso(requestDTO.getPeso())
-                .volumen(requestDTO.getVolumen())
-                .direccionEntrega(requestDTO.getDireccionEntrega())
-                .latitud(requestDTO.getLatitud())
-                .longitud(requestDTO.getLongitud())
+                .idDestinatario(requestDTO.getIdDestinatario())
+                .idDireccion(requestDTO.getIdDireccion())
+                .pesoTotal(requestDTO.getPesoTotal())
+                .volumenTotal(requestDTO.getVolumenTotal())
+                // No se actualiza el estado directamente aquí sin validaciones adicionales, pero si se envía, se maneja en UseCase.
                 .build();
                 
         Pedido actualizado = pedidoUseCase.actualizarPedido(id, pedido);
@@ -74,12 +72,11 @@ public class PedidoController {
     private PedidoResponseDTO toResponseDTO(Pedido pedido) {
         return PedidoResponseDTO.builder()
                 .id(pedido.getId())
+                .idDestinatario(pedido.getIdDestinatario())
+                .idDireccion(pedido.getIdDireccion())
+                .pesoTotal(pedido.getPesoTotal())
+                .volumenTotal(pedido.getVolumenTotal())
                 .estado(pedido.getEstado())
-                .peso(pedido.getPeso())
-                .volumen(pedido.getVolumen())
-                .direccionEntrega(pedido.getDireccionEntrega())
-                .latitud(pedido.getLatitud())
-                .longitud(pedido.getLongitud())
                 .fechaCreacion(pedido.getFechaCreacion())
                 .build();
     }

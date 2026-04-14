@@ -11,12 +11,11 @@ public class PedidoMapper {
         if (domain == null) return null;
         return PedidoEntity.builder()
                 .id(domain.getId())
+                .idDestinatario(domain.getIdDestinatario())
+                .idDireccion(domain.getIdDireccion())
+                .pesoTotal(domain.getPesoTotal())
+                .volumenTotal(domain.getVolumenTotal())
                 .estado(domain.getEstado())
-                .peso(domain.getPeso())
-                .volumen(domain.getVolumen())
-                .direccionEntrega(domain.getDireccionEntrega())
-                .latitud(domain.getLatitud())
-                .longitud(domain.getLongitud())
                 .fechaCreacion(domain.getFechaCreacion())
                 .build();
     }
@@ -25,12 +24,11 @@ public class PedidoMapper {
         if (entity == null) return null;
         return Pedido.builder()
                 .id(entity.getId())
+                .idDestinatario(entity.getIdDestinatario())
+                .idDireccion(entity.getIdDireccion())
+                .pesoTotal(entity.getPesoTotal())
+                .volumenTotal(entity.getVolumenTotal())
                 .estado(entity.getEstado())
-                .peso(entity.getPeso())
-                .volumen(entity.getVolumen())
-                .direccionEntrega(entity.getDireccionEntrega())
-                .latitud(entity.getLatitud())
-                .longitud(entity.getLongitud())
                 .fechaCreacion(entity.getFechaCreacion())
                 .build();
     }

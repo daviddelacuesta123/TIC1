@@ -4,9 +4,8 @@ import lombok.Data;
 
 @Data
 public class PedidoRequestDTO {
-    private Double peso;
-    private Double volumen;
-    private String direccionEntrega;
-    private Double latitud;
-    private Double longitud;
+    private Integer idDestinatario;
+    private Integer idDireccion;
+    private Double pesoTotal;
+    private Double volumenTotal;
 }

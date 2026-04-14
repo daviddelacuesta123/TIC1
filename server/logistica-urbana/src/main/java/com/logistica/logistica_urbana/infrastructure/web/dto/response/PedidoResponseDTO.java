@@ -8,11 +8,10 @@ import java.time.LocalDateTime;
 @Builder
 public class PedidoResponseDTO {
     private Long id;
+    private Integer idDestinatario;
+    private Integer idDireccion;
+    private Double pesoTotal;
+    private Double volumenTotal;
     private String estado;
-    private Double peso;
-    private Double volumen;
-    private String direccionEntrega;
-    private Double latitud;
-    private Double longitud;
     private LocalDateTime fechaCreacion;
 }

@@ -18,7 +18,7 @@ public class PedidoUseCase {
 
     public Pedido crearPedido(Pedido pedido) {
         pedido.setFechaCreacion(LocalDateTime.now());
-        pedido.setEstado("CREADO");
+        pedido.setEstado("PENDIENTE"); // Restricción del SQL
         return pedidoRepositoryPort.save(pedido);
     }
 
@@ -34,12 +34,14 @@ public class PedidoUseCase {
     public Pedido actualizarPedido(Long id, Pedido pedidoActualizado) {
         Pedido pedidoExistente = obtenerPedido(id);
         
-        pedidoExistente.setEstado(pedidoActualizado.getEstado());
-        pedidoExistente.setPeso(pedidoActualizado.getPeso());
-        pedidoExistente.setVolumen(pedidoActualizado.getVolumen());
-        pedidoExistente.setDireccionEntrega(pedidoActualizado.getDireccionEntrega());
-        pedidoExistente.setLatitud(pedidoActualizado.getLatitud());
-        pedidoExistente.setLongitud(pedidoActualizado.getLongitud());
+        pedidoExistente.setIdDestinatario(pedidoActualizado.getIdDestinatario());
+        pedidoExistente.setIdDireccion(pedidoActualizado.getIdDireccion());
+        pedidoExistente.setPesoTotal(pedidoActualizado.getPesoTotal());
+        pedidoExistente.setVolumenTotal(pedidoActualizado.getVolumenTotal());
+        
+        if (pedidoActualizado.getEstado() != null) {
+            pedidoExistente.setEstado(pedidoActualizado.getEstado());
+        }
         
         return pedidoRepositoryPort.save(pedidoExistente);
     }
