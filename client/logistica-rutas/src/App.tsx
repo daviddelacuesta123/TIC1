@@ -8,9 +8,11 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import NewRoute from './pages/NewRoute'
 import Vehicles from './pages/Vehicles'
+import NewVehicle from './pages/NewVehicle'
+import NewShipment from './pages/NewShipment'
 import './App.css'
 
-export type Page = 'dashboard' | 'shipments' | 'routes' | 'new-route' | 'vehicles'
+export type Page = 'dashboard' | 'shipments' | 'routes' | 'new-route' | 'vehicles' | 'new-vehicle' | 'new-shipment'
 type AuthView = 'login' | 'register'
 
 function App() {
@@ -45,10 +47,12 @@ function App() {
         <Header />
         <div className="page-content">
           {currentPage === 'dashboard' && <Dashboard />}
-          {currentPage === 'shipments' && <Shipments />}
+          {currentPage === 'shipments' && <Shipments onNavigate={(page) => setCurrentPage(page)} />}
           {currentPage === 'routes' && <RouteMap onNavigate={setCurrentPage} />}
           {currentPage === 'new-route' && <NewRoute onNavigate={setCurrentPage} />}
-          {currentPage === 'vehicles' && <Vehicles />}
+          {currentPage === 'vehicles' && <Vehicles onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'new-vehicle' && <NewVehicle onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'new-shipment' && <NewShipment onNavigate={(page) => setCurrentPage(page)} />}
         </div>
       </main>
     </div>

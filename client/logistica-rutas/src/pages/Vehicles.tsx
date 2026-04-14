@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import '../App.css'
 
 /**
@@ -17,20 +16,23 @@ interface Vehicle {
   estado: 'ocupado' | 'libre'
 }
 
-/**
- * Componente principal para la gestión CRUD de vehículos
- * Permite crear, leer, actualizar y eliminar vehículos
- */
-export default function Vehicles() {
-  // Estado que almacena la lista de vehículos
-  const [vehicles] = useState<Vehicle[]>([])
+interface VehiclesProps {
+  onNavigate: (page: 'new-vehicle') => void
+}
 
+/**
+ * Página Vehicles que muestra la tabla vacía y un botón para crear un vehículo
+ */
+export default function Vehicles({ onNavigate }: VehiclesProps) {
+  const vehicles: Vehicle[] = []
 
   return (
     <>
       <div className="page-header">
         <h1>Vehicles</h1>
-        <button className="btn-primary">+ New Vehicle</button>
+        <button className="btn-primary" onClick={() => onNavigate('new-vehicle')}>
+          + New Vehicle
+        </button>
       </div>
       
       <div className="table-container">
@@ -49,27 +51,35 @@ export default function Vehicles() {
             </tr>
           </thead>
           <tbody>
-            {vehicles.map((vehicle) => (
-              <tr key={vehicle.id}>
-                <td className="tracking-id">{vehicle.placa}</td>
-                <td>{vehicle.marca}</td>
-                <td>{vehicle.modelo}</td>
-                <td>{vehicle.capacidadKg}</td>
-                <td>{vehicle.capacidadM3}</td>
-                <td>${vehicle.costoPorKm.toFixed(2)}</td>
-                <td>
-                  <span className={`badge badge-${vehicle.propulsion.toLowerCase()}`}>
-                    {vehicle.propulsion}
-                  </span>
+            {vehicles.length === 0 ? (
+              <tr>
+                <td colSpan={9} className="empty-state">
+                  No vehicles created yet. Push "+ New Vehicle" to add one.
                 </td>
-                <td>
-                  <span className={`badge badge-${vehicle.estado}`}>
-                    {vehicle.estado.charAt(0).toUpperCase() + vehicle.estado.slice(1)}
-                  </span>
-                </td>
-                <td><button className="btn-icon">Edit</button></td>
               </tr>
-            ))}
+            ) : (
+              vehicles.map((vehicle) => (
+                <tr key={vehicle.id}>
+                  <td className="tracking-id">{vehicle.placa}</td>
+                  <td>{vehicle.marca}</td>
+                  <td>{vehicle.modelo}</td>
+                  <td>{vehicle.capacidadKg}</td>
+                  <td>{vehicle.capacidadM3}</td>
+                  <td>${vehicle.costoPorKm.toFixed(2)}</td>
+                  <td>
+                    <span className={`badge badge-${vehicle.propulsion.toLowerCase()}`}>
+                      {vehicle.propulsion}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`badge badge-${vehicle.estado}`}>
+                      {vehicle.estado.charAt(0).toUpperCase() + vehicle.estado.slice(1)}
+                    </span>
+                  </td>
+                  <td><button className="btn-icon">Edit</button></td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

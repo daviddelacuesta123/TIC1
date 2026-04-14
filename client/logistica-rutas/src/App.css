@@ -231,6 +231,97 @@
   transform: scale(0.98);
 }
 
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: var(--text-primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+.form-container {
+  background: var(--glass-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.create-form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.form-section-title {
+  margin-bottom: 1rem;
+}
+
+.form-section-title h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.form-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-col label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-col input,
+.form-col select {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.form-col input:focus,
+.form-col select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .table-container {
   background: var(--glass-bg);
   border: 1px solid var(--border-color);
