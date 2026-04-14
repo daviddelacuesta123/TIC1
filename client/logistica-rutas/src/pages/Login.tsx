@@ -1,19 +1,26 @@
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { loginApi } from '../services/authService';
 import './Login.css';
 
-interface LoginProps {
-  onLogin: () => void;
-  onGoToRegister: () => void;
-}
-
-export default function Login({ onLogin, onGoToRegister }: LoginProps) {
-  const [email, setEmail] = useState('');
+export default function Login() {
+  const { login } = useAuth();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (email && password) {
-      onLogin();
+    setError('');
+    setLoading(true);
+    try {
+      const { token } = await loginApi(username, password);
+      login(token);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -99,14 +106,15 @@ export default function Login({ onLogin, onGoToRegister }: LoginProps) {
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label htmlFor="email">Correo electrónico</label>
+              <label htmlFor="username">Usuario</label>
               <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="tu@empresa.com"
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="tu_usuario"
                 required
+                autoComplete="username"
               />
             </div>
 
@@ -119,36 +127,18 @@ export default function Login({ onLogin, onGoToRegister }: LoginProps) {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
+                autoComplete="current-password"
               />
             </div>
 
-            <div className="form-options">
-              <label className="remember-me">
-                <input type="checkbox" />
-                <span>Recordarme</span>
-              </label>
-              <a href="#" className="forgot-password">
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
+            {error && (
+              <p className="login-error">{error}</p>
+            )}
 
-            <button type="submit" className="login-button">
-              Iniciar sesión
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
             </button>
           </form>
-
-          <div className="register-link">
-            ¿No tienes una cuenta?{' '}
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                onGoToRegister();
-              }}
-            >
-              Registrate aquí
-            </a>
-          </div>
         </div>
 
         <button className="help-icon" aria-label="Ayuda">?</button>

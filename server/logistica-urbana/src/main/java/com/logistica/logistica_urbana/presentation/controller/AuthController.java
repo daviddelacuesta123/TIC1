@@ -5,6 +5,10 @@ import com.logistica.logistica_urbana.application.dto.response.CreateUserRespons
 import com.logistica.logistica_urbana.application.dto.response.LoginResponseDTO;
 import com.logistica.logistica_urbana.application.dto.request.LoginRequestDTO;
 import com.logistica.logistica_urbana.application.service.AuthService;
+import com.logistica.logistica_urbana.domain.model.entities.Usuario;
+import com.logistica.logistica_urbana.domain.model.enums.Rol;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,15 +23,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO request) {
-
-        String token = authService.login(
-                request.getUsername(),
-                request.getPassword()
-        );
-
-        return new LoginResponseDTO(token);
-
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) {
+        try {
+            String token = authService.login(
+                    request.getUsername(),
+                    request.getPassword()
+            );
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(java.util.Map.of("error", e.getMessage()));
+        }
     }
 
     // CREAR USUARIO
