@@ -4,7 +4,7 @@ import com.logistica.logistica_urbana.domain.model.enums.Rol;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CreateUserResponse {
+public class CreateUserResponseDTO {
     private Integer id;
     private String username;
     private Rol rol;
