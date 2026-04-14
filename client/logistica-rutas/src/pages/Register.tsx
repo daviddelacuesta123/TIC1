@@ -1,19 +1,23 @@
 import { useState } from 'react';
 import './Login.css';
+import './Register.css';
 
-interface LoginProps {
-  onLogin: () => void;
-  onGoToRegister: () => void;
+interface RegisterProps {
+  onRegister: () => void;
+  onGoToLogin: () => void;
 }
 
-export default function Login({ onLogin, onGoToRegister }: LoginProps) {
+export default function Register({ onRegister, onGoToLogin }: RegisterProps) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && password) {
-      onLogin();
+    if (name && email && password) {
+      onRegister();
+    } else {
+      alert('Por favor completa todos los campos para registrarte.');
     }
   };
 
@@ -42,10 +46,10 @@ export default function Login({ onLogin, onGoToRegister }: LoginProps) {
           </div>
 
           <div className="hero-text">
-            <h1>Optimiza tus rutas de entrega</h1>
+            <h1>Únete a RouteOptimizer</h1>
             <p>
-              Sistema inteligente de planificación y gestión de rutas para logística urbana.
-              Reduce costos, optimiza tiempos y mejora la eficiencia de tus operaciones.
+              Crea tu cuenta hoy y comienza a disfrutar de las ventajas de nuestro
+              sistema inteligente de planificación y gestión de rutas.
             </p>
           </div>
 
@@ -93,11 +97,23 @@ export default function Login({ onLogin, onGoToRegister }: LoginProps) {
       <div className="login-right-panel">
         <div className="login-form-wrapper">
           <div className="form-header">
-            <h2>Bienvenido</h2>
-            <p>Ingresa tus credenciales para continuar</p>
+            <h2>Crear Cuenta</h2>
+            <p>Ingresa tus datos para registrarte en la plataforma</p>
           </div>
 
           <form onSubmit={handleSubmit} className="login-form">
+            <div className="form-group">
+              <label htmlFor="name">Nombre completo</label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Tu nombre completo"
+                required
+              />
+            </div>
+
             <div className="form-group">
               <label htmlFor="email">Correo electrónico</label>
               <input
@@ -122,31 +138,21 @@ export default function Login({ onLogin, onGoToRegister }: LoginProps) {
               />
             </div>
 
-            <div className="form-options">
-              <label className="remember-me">
-                <input type="checkbox" />
-                <span>Recordarme</span>
-              </label>
-              <a href="#" className="forgot-password">
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
-
             <button type="submit" className="login-button">
-              Iniciar sesión
+              Registrarse
             </button>
           </form>
 
           <div className="register-link">
-            ¿No tienes una cuenta?{' '}
+            ¿Ya tienes una cuenta?{' '}
             <a
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                onGoToRegister();
+                onGoToLogin();
               }}
             >
-              Registrate aquí
+              Inicia sesión aquí
             </a>
           </div>
         </div>

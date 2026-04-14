@@ -18,7 +18,7 @@ export default function Shipments() {
               <th>Origin</th>
               <th>Destination</th>
               <th>Status</th>
-              <th>Est. Date</th>
+              <th>Hora estimada</th>
               <th>Action</th>
             </tr>
           </thead>

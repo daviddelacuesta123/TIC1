@@ -5,16 +5,36 @@ import Dashboard from './pages/Dashboard'
 import Shipments from './pages/Shipments'
 import RouteMap from './pages/RouteMap'
 import Login from './pages/Login'
+import Register from './pages/Register'
+import NewRoute from './pages/NewRoute'
 import './App.css'
 
-export type Page = 'dashboard' | 'shipments' | 'routes'
+export type Page = 'dashboard' | 'shipments' | 'routes' | 'new-route'
+type AuthView = 'login' | 'register'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [authView, setAuthView] = useState<AuthView>('login')
   const [currentPage, setCurrentPage] = useState<Page>('dashboard')
 
   if (!isAuthenticated) {
-    return <Login onLogin={() => setIsAuthenticated(true)} />
+    if (authView === 'register') {
+      return (
+        <Register
+          onRegister={() => {
+            setIsAuthenticated(true)
+            setAuthView('login')
+          }}
+          onGoToLogin={() => setAuthView('login')}
+        />
+      )
+    }
+    return (
+      <Login
+        onLogin={() => setIsAuthenticated(true)}
+        onGoToRegister={() => setAuthView('register')}
+      />
+    )
   }
 
   return (
@@ -25,7 +45,8 @@ function App() {
         <div className="page-content">
           {currentPage === 'dashboard' && <Dashboard />}
           {currentPage === 'shipments' && <Shipments />}
-          {currentPage === 'routes' && <RouteMap />}
+          {currentPage === 'routes' && <RouteMap onNavigate={setCurrentPage} />}
+          {currentPage === 'new-route' && <NewRoute onNavigate={setCurrentPage} />}
         </div>
       </main>
     </div>
