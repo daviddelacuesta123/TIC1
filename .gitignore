@@ -1,2 +1,7 @@
 .idea/
 .vscode/
+
+# Variables de entorno — nunca commitear valores reales
+.env
+.env.local
+.env.*.local

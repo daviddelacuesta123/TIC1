@@ -44,16 +44,25 @@ public class VehiculoWriteRepositoryAdapter implements VehiculoWriteRepository {
      */
     @Override
     public Vehiculo save(Vehiculo vehiculo) {
-        VehiculoEntity entity = mapper.toEntity(vehiculo);
+        final VehiculoEntity entity;
 
-        // Asegurar que el modelo solo se referencia (no se crea uno nuevo)
-        ModeloEntity modeloRef = new ModeloEntity();
-        modeloRef.setId(vehiculo.getIdModelo());
-        entity.setModelo(modeloRef);
-
-        entity.setActivo(true);
-
-        asignarPropulsionEntities(vehiculo, entity);
+        if (vehiculo.getId() != null) {
+            // UPDATE: cargar la entidad managed y aplicar solo los campos mutables.
+            // No se recrean las entidades de propulsión para evitar la colisión de
+            // identidad en la sesión de Hibernate (DuplicateKeyException con @MapsId).
+            entity = jpaRepository.findById(vehiculo.getId()).orElseThrow();
+            entity.setCapacidadPeso(vehiculo.getCapacidadPeso().getValor());
+            entity.setCapacidadVolumen(vehiculo.getCapacidadVolumen());
+            entity.setCostoKmBase(vehiculo.getCostoPorKm());
+        } else {
+            // CREATE: construir la entidad desde cero con su propulsión
+            entity = mapper.toEntity(vehiculo);
+            ModeloEntity modeloRef = new ModeloEntity();
+            modeloRef.setId(vehiculo.getIdModelo());
+            entity.setModelo(modeloRef);
+            entity.setActivo(true);
+            asignarPropulsionEntities(vehiculo, entity);
+        }
 
         VehiculoEntity guardado = jpaRepository.save(entity);
         return mapper.toDomain(jpaRepository.findById(guardado.getIdVehiculo()).orElseThrow());
