@@ -120,20 +120,19 @@ CREATE TABLE repartidor_vehiculo (
 -- =============================================================================
 
 CREATE TABLE destinatario (
-    id_destinatario    SERIAL       PRIMARY KEY,
+    id    SERIAL       PRIMARY KEY,
     nombre             VARCHAR(100) NOT NULL,
     apellido           VARCHAR(100) NOT NULL,
     dni                VARCHAR(20)  NOT NULL UNIQUE,
     telefono           VARCHAR(20)  NOT NULL UNIQUE,
-    correo_electronico VARCHAR(150) NOT NULL UNIQUE
+    correoElectronico VARCHAR(150) NOT NULL UNIQUE
 );
 
 CREATE TABLE direccion (
-    id_direccion    SERIAL        PRIMARY KEY,
-    id_destinatario INTEGER       NOT NULL REFERENCES destinatario(id_destinatario),
+    id    SERIAL        PRIMARY KEY,
     latitud         NUMERIC(10,7) NOT NULL CHECK (latitud  BETWEEN -90  AND  90),
     longitud        NUMERIC(10,7) NOT NULL CHECK (longitud BETWEEN -180 AND 180),
-    direccion_texto VARCHAR(300)  NOT NULL,
+    direccion       VARCHAR(300)  NOT NULL,
     ciudad          VARCHAR(100)  NOT NULL,
     pais            VARCHAR(100)  NOT NULL DEFAULT 'Colombia'
 );

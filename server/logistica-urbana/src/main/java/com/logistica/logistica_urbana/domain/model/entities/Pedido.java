@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Pedido {
     private Long id;
-    private Integer idDestinatario;
-    private Integer idDireccion;
+    private Long idDestinatario;
+    private Long idDireccion;
     private Double pesoTotal;
     private Double volumenTotal;
     private String estado;
