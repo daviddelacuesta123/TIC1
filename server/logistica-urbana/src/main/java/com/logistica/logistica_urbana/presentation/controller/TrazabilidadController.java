@@ -1,4 +1,4 @@
-package com.logistica.logistica_urbana.infrastructure.web.controller;
+package com.logistica.logistica_urbana.presentation.controller;
 
 import com.logistica.logistica_urbana.application.dto.response.TrazabilidadResponseDTO;
 import com.logistica.logistica_urbana.application.service.TrazabilidadUseCase;

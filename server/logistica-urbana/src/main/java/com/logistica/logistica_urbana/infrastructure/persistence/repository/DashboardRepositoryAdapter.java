@@ -1,4 +1,4 @@
-package com.logistica.logistica_urbana.infrastructure.persistence.adapter;
+package com.logistica.logistica_urbana.infrastructure.persistence.repository;
 
 import com.logistica.logistica_urbana.domain.port.IDashboardRepositoryPort;
 import org.springframework.jdbc.core.JdbcTemplate;
