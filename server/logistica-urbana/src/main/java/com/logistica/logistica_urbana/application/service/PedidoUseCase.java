@@ -2,9 +2,9 @@ package com.logistica.logistica_urbana.application.service;
 
 import com.logistica.logistica_urbana.domain.model.entities.Pedido;
 import com.logistica.logistica_urbana.domain.port.IPedidoRepositoryPort;
+import com.logistica.logistica_urbana.infrastructure.web.dto.request.PedidoRequestDTO;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,10 +16,15 @@ public class PedidoUseCase {
         this.pedidoRepositoryPort = pedidoRepositoryPort;
     }
 
-    public Pedido crearPedido(Pedido pedido) {
-        pedido.setFechaCreacion(LocalDateTime.now());
-        pedido.setEstado("PENDIENTE"); // Restricción del SQL
-        return pedidoRepositoryPort.save(pedido);
+    // Recibe DTO, retorna Entidad
+    public Pedido crearPedido(PedidoRequestDTO dto) {
+        Pedido nuevoPedido = Pedido.crearPedido(
+                dto.getIdDestinatario(),
+                dto.getIdDireccion(),
+                dto.getPesoTotal(),
+                dto.getVolumenTotal()
+        );
+        return pedidoRepositoryPort.save(nuevoPedido);
     }
 
     public Pedido obtenerPedido(Long id) {
@@ -31,17 +36,16 @@ public class PedidoUseCase {
         return pedidoRepositoryPort.findAll();
     }
 
-    public Pedido actualizarPedido(Long id, Pedido pedidoActualizado) {
+    // Recibe DTO, retorna Entidad
+    public Pedido actualizarPedido(Long id, PedidoRequestDTO dto) {
         Pedido pedidoExistente = obtenerPedido(id);
         
-        pedidoExistente.setIdDestinatario(pedidoActualizado.getIdDestinatario());
-        pedidoExistente.setIdDireccion(pedidoActualizado.getIdDireccion());
-        pedidoExistente.setPesoTotal(pedidoActualizado.getPesoTotal());
-        pedidoExistente.setVolumenTotal(pedidoActualizado.getVolumenTotal());
-        
-        if (pedidoActualizado.getEstado() != null) {
-            pedidoExistente.setEstado(pedidoActualizado.getEstado());
-        }
+        pedidoExistente.actualizarDatos(
+                dto.getIdDestinatario(),
+                dto.getIdDireccion(),
+                dto.getPesoTotal(),
+                dto.getVolumenTotal()
+        );
         
         return pedidoRepositoryPort.save(pedidoExistente);
     }

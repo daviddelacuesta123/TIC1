@@ -22,14 +22,15 @@ public class PedidoMapper {
 
     public Pedido toDomain(PedidoEntity entity) {
         if (entity == null) return null;
-        return Pedido.builder()
-                .id(entity.getId())
-                .idDestinatario(entity.getIdDestinatario())
-                .idDireccion(entity.getIdDireccion())
-                .pesoTotal(entity.getPesoTotal())
-                .volumenTotal(entity.getVolumenTotal())
-                .estado(entity.getEstado())
-                .fechaCreacion(entity.getFechaCreacion())
-                .build();
+        // Usamos el Factory Method de reconstrucción
+        return Pedido.reconstruirPedido(
+                entity.getId(),
+                entity.getIdDestinatario(),
+                entity.getIdDireccion(),
+                entity.getPesoTotal(),
+                entity.getVolumenTotal(),
+                entity.getEstado(),
+                entity.getFechaCreacion()
+        );
     }
 }

@@ -1,9 +1,9 @@
 package com.logistica.logistica_urbana.infrastructure.web.controller;
 
-import  com.logistica.logistica_urbana.application.service.PedidoUseCase;
-import  com.logistica.logistica_urbana.domain.model.entities.Pedido;
-import  com.logistica.logistica_urbana.infrastructure.web.dto.request.PedidoRequestDTO;
-import  com.logistica.logistica_urbana.infrastructure.web.dto.response.PedidoResponseDTO;
+import com.logistica.logistica_urbana.application.service.PedidoUseCase;
+import com.logistica.logistica_urbana.domain.model.entities.Pedido;
+import com.logistica.logistica_urbana.infrastructure.web.dto.request.PedidoRequestDTO;
+import com.logistica.logistica_urbana.infrastructure.web.dto.response.PedidoResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +24,8 @@ public class PedidoController {
 
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> crearPedido(@RequestBody PedidoRequestDTO requestDTO) {
-        Pedido pedido = Pedido.builder()
-                .idDestinatario(requestDTO.getIdDestinatario())
-                .idDireccion(requestDTO.getIdDireccion())
-                .pesoTotal(requestDTO.getPesoTotal())
-                .volumenTotal(requestDTO.getVolumenTotal())
-                .build();
-                
-        Pedido creado = pedidoUseCase.crearPedido(pedido);
+        // Pasa el DTO directo al caso de uso
+        Pedido creado = pedidoUseCase.crearPedido(requestDTO);
         return new ResponseEntity<>(toResponseDTO(creado), HttpStatus.CREATED);
     }
 
@@ -51,15 +45,8 @@ public class PedidoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PedidoResponseDTO> actualizarPedido(@PathVariable Long id, @RequestBody PedidoRequestDTO requestDTO) {
-        Pedido pedido = Pedido.builder()
-                .idDestinatario(requestDTO.getIdDestinatario())
-                .idDireccion(requestDTO.getIdDireccion())
-                .pesoTotal(requestDTO.getPesoTotal())
-                .volumenTotal(requestDTO.getVolumenTotal())
-                // No se actualiza el estado directamente aquí sin validaciones adicionales, pero si se envía, se maneja en UseCase.
-                .build();
-                
-        Pedido actualizado = pedidoUseCase.actualizarPedido(id, pedido);
+        // Pasa el DTO directo al caso de uso
+        Pedido actualizado = pedidoUseCase.actualizarPedido(id, requestDTO);
         return ResponseEntity.ok(toResponseDTO(actualizado));
     }
 
