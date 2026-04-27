@@ -1,9 +1,10 @@
 package com.logistica.logistica_urbana.infrastructure.web.controller;
 
+import com.logistica.logistica_urbana.application.dto.request.PedidoRequestDTO;
+import com.logistica.logistica_urbana.application.dto.response.PedidoResponseDTO;
 import com.logistica.logistica_urbana.application.service.PedidoUseCase;
 import com.logistica.logistica_urbana.domain.model.entities.Pedido;
-import com.logistica.logistica_urbana.infrastructure.web.dto.request.PedidoRequestDTO;
-import com.logistica.logistica_urbana.infrastructure.web.dto.response.PedidoResponseDTO;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

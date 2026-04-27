@@ -1,4 +1,4 @@
-package com.logistica.logistica_urbana.infrastructure.web.dto.response;
+package com.logistica.logistica_urbana.application.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,9 @@
 package com.logistica.logistica_urbana.application.service;
 
+import com.logistica.logistica_urbana.application.dto.request.PedidoRequestDTO;
 import com.logistica.logistica_urbana.domain.model.entities.Pedido;
 import com.logistica.logistica_urbana.domain.port.IPedidoRepositoryPort;
-import com.logistica.logistica_urbana.infrastructure.web.dto.request.PedidoRequestDTO;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
