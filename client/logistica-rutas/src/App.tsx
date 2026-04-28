@@ -9,11 +9,22 @@ import Login from './pages/Login'
 import NewRoute from './pages/NewRoute'
 import Vehicles from './pages/Vehicles'
 import NewVehicle from './pages/NewVehicle'
+import NewRepartidor from './pages/NewRepartidor'
+import Repartidores from './pages/Repartidores'
 import NewShipment from './pages/NewShipment'
 import './App.css'
 
 
-export type Page = 'dashboard' | 'shipments' | 'routes' | 'new-route' | 'vehicles' | 'new-vehicle' | 'new-shipment'
+export type Page =
+  | 'dashboard'
+  | 'shipments'
+  | 'routes'
+  | 'new-route'
+  | 'vehicles'
+  | 'new-vehicle'
+  | 'repartidores'
+  | 'new-repartidor'
+  | 'new-shipment'
 type AuthView = 'login' | 'register'
 
 function AppContent() {
@@ -36,6 +47,8 @@ function AppContent() {
           {currentPage === 'new-route' && <NewRoute onNavigate={setCurrentPage} />}
           {currentPage === 'vehicles' && <Vehicles onNavigate={(page) => setCurrentPage(page)} />}
           {currentPage === 'new-vehicle' && <NewVehicle onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'repartidores' && <Repartidores onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'new-repartidor' && <NewRepartidor onNavigate={(page) => setCurrentPage(page)} />}
           {currentPage === 'new-shipment' && <NewShipment onNavigate={(page) => setCurrentPage(page)} />}
         </div>
       </main>

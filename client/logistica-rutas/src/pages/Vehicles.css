@@ -225,6 +225,48 @@
   font-size: 1.1rem;
 }
 
+@media (max-width: 1024px) {
+  .vehicles-container {
+    padding: 1rem;
+  }
+
+  .vehicles-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .vehicles-table {
+    min-width: 100%;
+  }
+
+  .vehicles-table th,
+  .vehicles-table td {
+    padding: 0.85rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .vehicles-table-section {
+    overflow-x: auto;
+  }
+
+  .vehicles-table {
+    min-width: 960px;
+  }
+
+  .vehicles-table th,
+  .vehicles-table td {
+    padding: 0.7rem;
+    font-size: 0.92rem;
+  }
+
+  .actions-cell {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 /* Badges */
 .badge {
   display: inline-block;
