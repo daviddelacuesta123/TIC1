@@ -1,6 +1,6 @@
 .vehicles-container {
   padding: 2rem;
-  max-width: 1600px;
+  max-width: 1500px;
   margin: 0 auto;
 }
 
@@ -13,9 +13,35 @@
 
 .vehicles-header h1 {
   font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-color, #1a1a1a);
   margin: 0;
+  color: var(--text-color, #1a1a1a);
+  font-weight: 700;
+}
+
+/* Error Banner */
+.error-banner {
+  padding: 1rem 1.25rem;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  color: #b91c1c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.error-banner button {
+  color: #b91c1c;
+  transition: opacity 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.error-banner button:hover {
+  opacity: 0.7;
 }
 
 /* Form Section */
@@ -49,18 +75,10 @@
 .form-group input,
 .form-group select {
   padding: 0.75rem;
-  border: 2px solid var(--border-color, #e0e0e0);
+  border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 1rem;
   font-family: inherit;
-  transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: var(--accent-color, #3b82f6);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .form-actions {
@@ -77,24 +95,14 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
 .btn-primary {
-  background-color: var(--accent-color, #3b82f6);
+  background-color: #0ea5e9;
   color: white;
-}
-
-.btn-primary:hover {
-  background-color: #2563eb;
 }
 
 .btn-success {
@@ -102,17 +110,9 @@
   color: white;
 }
 
-.btn-success:hover {
-  background-color: #059669;
-}
-
 .btn-secondary {
-  background-color: var(--bg-tertiary, #e5e7eb);
-  color: var(--text-color, #1a1a1a);
-}
-
-.btn-secondary:hover {
-  background-color: #d1d5db;
+  background-color: #e5e7eb;
+  color: #1a1a1a;
 }
 
 .btn-sm {
@@ -125,17 +125,9 @@
   color: white;
 }
 
-.btn-edit:hover {
-  background-color: #2563eb;
-}
-
 .btn-delete {
   background-color: #ef4444;
   color: white;
-}
-
-.btn-delete:hover {
-  background-color: #dc2626;
 }
 
 /* Table Section */
@@ -143,7 +135,7 @@
   background: white;
   border-radius: 8px;
   overflow-x: auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .vehicles-table {
@@ -151,8 +143,6 @@
   border-collapse: collapse;
   table-layout: auto;
   min-width: 0;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
 .vehicles-table th,
@@ -160,51 +150,29 @@
   word-break: break-word;
 }
 
-/* Firefox scrollbar styling */
-.vehicles-table-section::-webkit-scrollbar {
-  height: 8px;
-}
-
-.vehicles-table-section::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 8px;
-}
-
-.vehicles-table-section::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 8px;
-}
-
-.vehicles-table-section::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
 .vehicles-table thead {
-  background-color: var(--bg-secondary, #f3f4f6);
-  border-bottom: 2px solid var(--border-color, #e5e7eb);
+  background: #f3f4f6;
+}
+
+.vehicles-table th,
+.vehicles-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .vehicles-table th {
-  padding: 1rem;
-  text-align: left;
   font-weight: 700;
-  color: var(--text-color, #1a1a1a);
+  color: #1a1a1a;
   font-size: 0.95rem;
-  white-space: nowrap;
 }
 
 .vehicles-table td {
-  padding: 1rem;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
-  color: var(--text-color, #1a1a1a);
-}
-
-.vehicles-table tbody tr {
-  transition: background-color 0.2s ease;
+  color: #1a1a1a;
 }
 
 .vehicles-table tbody tr:hover {
-  background-color: var(--bg-secondary, #f9fafb);
+  background: #f9fafb;
 }
 
 .vehicles-table tbody tr:last-child td {
@@ -212,23 +180,21 @@
 }
 
 .placa-cell {
-  font-weight: 600;
-  font-size: 1.05rem;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a1a;
 }
 
 .actions-cell {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-  white-space: nowrap;
 }
 
 .empty-state {
   text-align: center;
-  color: var(--text-secondary, #6b7280);
-  padding: 3rem 1rem;
-  font-size: 1.1rem;
+  padding: 2rem;
+  color: #6b7280;
 }
 
 @media (max-width: 1024px) {
@@ -252,78 +218,6 @@
   }
 }
 
-@media (max-width: 720px) {
-  .vehicles-container {
-    padding: 0.75rem;
-  }
-
-  .vehicles-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .vehicles-table-section {
-    overflow-x: auto;
-  }
-
-  .vehicles-table {
-    min-width: 0;
-  }
-
-  .vehicles-table th,
-  .vehicles-table td {
-    padding: 0.75rem 0.9rem;
-    font-size: 0.88rem;
-    white-space: normal;
-  }
-
-  .vehicles-table th {
-    font-size: 0.82rem;
-  }
-
-  .actions-cell {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-
-/* Badges */
-.badge {
-  display: inline-block;
-  padding: 0.4rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.badge-libre {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-
-.badge-ocupado {
-  background-color: #fed7aa;
-  color: #92400e;
-}
-
-.badge-térmica {
-  background-color: #fed7aa;
-  color: #92400e;
-}
-
-.badge-eléctrica {
-  background-color: #dbeafe;
-  color: #0c2d6b;
-}
-
-.badge-híbrida {
-  background-color: #f3e8ff;
-  color: #581c87;
-}
-
-
 @media (max-width: 768px) {
   .vehicles-container {
     padding: 1rem;
@@ -335,10 +229,6 @@
     gap: 1rem;
   }
 
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
   .vehicles-table-section {
     overflow-x: auto;
   }
@@ -347,11 +237,40 @@
     flex-direction: column;
     gap: 0.25rem;
   }
+}
 
-  .btn-sm {
-    width: 100%;
-    justify-content: center;
-    padding: 0.5rem 0.8rem;
-  }
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-libre {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge-ocupado {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-térmica {
+  background-color: #ffedd5;
+  color: #9a3412;
+}
+
+.badge-eléctrica {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-híbrida {
+  background-color: #f3e8ff;
+  color: #6b21a8;
 }
 
