@@ -4,8 +4,16 @@ interface ShipmentsProps {
   onNavigate: (page: 'new-shipment') => void
 }
 
+export interface Shipment {
+  id: string;
+  origin: string;
+  destination: string;
+  status: string;
+  date: string;
+}
+
 export default function Shipments({ onNavigate }: ShipmentsProps) {
-  const shipments: any[] = []
+  const shipments: Shipment[] = []
 
   return (
     <>

@@ -25,7 +25,7 @@ export type Page =
   | 'repartidores'
   | 'new-repartidor'
   | 'new-shipment'
-type AuthView = 'login' | 'register'
+
 
 function AppContent() {
   const { user } = useAuth()

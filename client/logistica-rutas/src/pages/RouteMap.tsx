@@ -117,6 +117,14 @@ async function loadLeaflet() {
     link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
     document.head.appendChild(link);
   }
+  if (!document.getElementById('leaflet-routing-css')) {
+    const link = document.createElement('link');
+    link.id = 'leaflet-routing-css';
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css';
+    document.head.appendChild(link);
+  }
+
   // Load JS
   if (!(window as unknown as Record<string, unknown>)['L']) {
     await new Promise<void>((resolve, reject) => {
@@ -127,7 +135,20 @@ async function loadLeaflet() {
       document.head.appendChild(script);
     });
   }
-  return (window as unknown as Record<string, unknown>)['L'] as LeafletType;
+
+  const L = (window as unknown as Record<string, unknown>)['L'] as LeafletType;
+  
+  if (!L.Routing) {
+    await new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js';
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Leaflet Routing load failed'));
+      document.head.appendChild(script);
+    });
+  }
+
+  return L;
 }
 
 // Minimal Leaflet types
@@ -138,6 +159,10 @@ interface LeafletMap {
   fitBounds(bounds: unknown, opts?: unknown): void;
   addLayer(layer: unknown): void;
   removeLayer(layer: unknown): void;
+  removeControl(control: unknown): void;
+}
+interface LeafletRoutingControl {
+  addTo(m: LeafletMap): unknown;
 }
 interface LeafletType {
   map(el: HTMLElement, opts?: unknown): LeafletMap;
@@ -145,6 +170,10 @@ interface LeafletType {
   polyline(coords: [number, number][], opts?: unknown): { addTo(m: LeafletMap): unknown; getBounds(): unknown };
   circleMarker(latlng: LatLng | [number, number], opts?: unknown): { addTo(m: LeafletMap): unknown; bindPopup(s: string): unknown };
   latLngBounds(coords: [number, number][]): unknown;
+  latLng(lat: number, lng: number): LatLng;
+  Routing: {
+    control(opts: unknown): LeafletRoutingControl;
+  };
 }
 
 // ──────────────────────────────────────────────
@@ -158,6 +187,7 @@ export default function RouteMap({ onNavigate }: RouteMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMapRef = useRef<LeafletMap | null>(null);
   const layersRef = useRef<unknown[]>([]);
+  const controlsRef = useRef<unknown[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<string>('r1');
   const [leaflet, setLeaflet] = useState<LeafletType | null>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -210,20 +240,41 @@ export default function RouteMap({ onNavigate }: RouteMapProps) {
     });
     layersRef.current = [];
 
+    controlsRef.current.forEach((control) => {
+      if (typeof map.removeControl === 'function') {
+        map.removeControl(control);
+      }
+    });
+    controlsRef.current = [];
+
     const route = ROUTES.find((r) => r.id === selectedRoute);
     if (!route) return;
 
     const coords = route.coordinates.map((s) => [s.lat, s.lng] as [number, number]);
+    const waypoints = route.coordinates.map(s => leaflet.latLng(s.lat, s.lng));
 
-    // Draw polyline
-    const line = leaflet.polyline(coords, {
-      color: route.color,
-      weight: 4,
-      opacity: 0.85,
-      dashArray: route.status === 'pending' ? '8 6' : undefined,
+    // Draw routing line
+    const control = leaflet.Routing.control({
+      waypoints,
+      lineOptions: {
+        styles: [{ 
+          color: route.color, 
+          weight: 4, 
+          opacity: 0.85,
+          dashArray: route.status === 'pending' ? '8 6' : undefined
+        }],
+        extendToWaypoints: true,
+        missingRouteTolerance: 0
+      },
+      createMarker: function() { return null; }, // Hide default markers
+      addWaypoints: false,
+      routeWhileDragging: false,
+      show: false, // Don't show text itinerary
+      fitSelectedRoutes: false
     });
-    (map as unknown as { addLayer(l: unknown): void }).addLayer(line);
-    layersRef.current.push(line);
+    
+    control.addTo(map);
+    controlsRef.current.push(control);
 
     // Draw markers
     route.coordinates.forEach((stop, idx) => {
