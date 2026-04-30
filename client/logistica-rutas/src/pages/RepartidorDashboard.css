@@ -1,0 +1,120 @@
+.rep-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.rep-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1.5rem;
+}
+
+.rep-dashboard-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  letter-spacing: -0.5px;
+}
+
+.rep-dashboard-header p {
+  margin: 0.5rem 0 0 0;
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+.rep-dashboard-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-light);
+  font-weight: 500;
+  background: var(--bg-hover);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.rep-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.rep-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rep-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.clickable-card {
+  cursor: pointer;
+}
+
+.rep-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rep-card-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.rep-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.icon-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.icon-info {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+}
+
+.rep-card-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.rep-value-unit {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.rep-card-subtitle {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}

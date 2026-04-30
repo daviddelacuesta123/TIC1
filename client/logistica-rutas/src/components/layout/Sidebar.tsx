@@ -1,11 +1,14 @@
 import type { Page } from '../../App'
-
+import { useAuth } from '../../context/AuthContext'
 interface SidebarProps {
   currentPage: Page
   onNavigate: (page: Page) => void
 }
 
 export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
+  const { user } = useAuth()
+  const isRepartidor = user?.rol === 'REPARTIDOR'
+
   return (
     <nav className="sidebar">
       <div className="sidebar-brand" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2rem' }}>
@@ -29,10 +32,19 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
       </div>
       <ul>
         <li className={currentPage === 'dashboard' ? 'active' : ''} onClick={() => onNavigate('dashboard')}>Dashboard</li>
-        <li className={currentPage === 'shipments' ? 'active' : ''} onClick={() => onNavigate('shipments')}>Shipments</li>
-        <li className={currentPage === 'routes' ? 'active' : ''} onClick={() => onNavigate('routes')}>Routes Map</li>
-        <li className={currentPage === 'vehicles' ? 'active' : ''} onClick={() => onNavigate('vehicles')}>Vehicles</li>
-        <li className={currentPage === 'repartidores' ? 'active' : ''} onClick={() => onNavigate('repartidores')}>Repartidores</li>
+        
+        {isRepartidor && (
+          <li className={currentPage === 'repartidor-pedidos' ? 'active' : ''} onClick={() => onNavigate('repartidor-pedidos')}>Historial de Pedidos</li>
+        )}
+        
+        {!isRepartidor && (
+          <>
+            <li className={currentPage === 'shipments' ? 'active' : ''} onClick={() => onNavigate('shipments')}>Shipments</li>
+            <li className={currentPage === 'routes' ? 'active' : ''} onClick={() => onNavigate('routes')}>Routes Map</li>
+            <li className={currentPage === 'vehicles' ? 'active' : ''} onClick={() => onNavigate('vehicles')}>Vehicles</li>
+            <li className={currentPage === 'repartidores' ? 'active' : ''} onClick={() => onNavigate('repartidores')}>Repartidores</li>
+          </>
+        )}
       </ul>
     </nav>
   )

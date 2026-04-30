@@ -34,6 +34,17 @@ export default function Login() {
     login(token);
   };
 
+  const handleRepartidor = () => {
+    const payload = {
+      sub: username || 'repartidor_demo',
+      rol: 'REPARTIDOR',
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
+    };
+    const token = `${btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))}.${btoa(JSON.stringify(payload))}.fake-signature`;
+    login(token);
+  };
+
+
   return (
     <div className="login-container">
       {/* Left Panel */}
@@ -153,7 +164,14 @@ export default function Login() {
               className="login-button login-button-secondary"
               onClick={handleNoPassword}
             >
-              Entrar sin contraseña
+              Entrar como administrador
+            </button>
+            <button
+              type="button"
+              className="login-button login-button-secondary"
+              onClick={handleRepartidor}
+            >
+              Entrar como repartidor
             </button>
           </form>
         </div>
