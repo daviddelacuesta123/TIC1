@@ -1,0 +1,135 @@
+/* ──────────────────────────────────────────────
+   RepartidorMapa – styles complementary to RouteMap.css
+   ────────────────────────────────────────────── */
+
+/* User badge in header */
+.rep-mapa-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.9rem;
+  background: linear-gradient(135deg, rgba(9, 180, 219, 0.12), rgba(14, 187, 141, 0.12));
+  border: 1.5px solid rgba(9, 180, 219, 0.35);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #09b4db;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Empty state */
+.rep-mapa-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px dashed #d1d5db;
+  padding: 3rem 2rem;
+  text-align: center;
+  min-height: 420px;
+}
+
+.rep-mapa-empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(9, 180, 219, 0.1), rgba(14, 187, 141, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #09b4db;
+}
+
+.rep-mapa-empty h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.rep-mapa-empty p {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.rep-mapa-empty-hint {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  background: #f9fafb;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Stops list */
+.rep-mapa-stops {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.rep-mapa-stop-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.55rem 0;
+  position: relative;
+}
+
+/* Vertical connector line */
+.rep-mapa-stop-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: calc(50% + 12px);
+  width: 2px;
+  height: calc(100% - 8px);
+  background: #e5e7eb;
+  z-index: 0;
+}
+
+.rep-mapa-stop-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.rep-mapa-stop-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.rep-mapa-stop-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f3f4f6;
+  border-radius: 4px;
+  padding: 1px 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

@@ -14,6 +14,7 @@ import Repartidores from './pages/Repartidores'
 import NewShipment from './pages/NewShipment'
 import RepartidorDashboard from './pages/RepartidorDashboard'
 import RepartidorPedidos from './pages/RepartidorPedidos'
+import RepartidorMapa from './pages/RepartidorMapa'
 import './App.css'
 
 
@@ -28,6 +29,7 @@ export type Page =
   | 'new-repartidor'
   | 'new-shipment'
   | 'repartidor-pedidos'
+  | 'repartidor-mapa'
 
 
 function AppContent() {
@@ -48,6 +50,7 @@ function AppContent() {
         <div className="page-content">
           {currentPage === 'dashboard' && (isRepartidor ? <RepartidorDashboard onNavigate={setCurrentPage} /> : <Dashboard />)}
           {currentPage === 'repartidor-pedidos' && isRepartidor && <RepartidorPedidos />}
+          {currentPage === 'repartidor-mapa' && isRepartidor && <RepartidorMapa />}
           {!isRepartidor && currentPage === 'shipments' && <Shipments onNavigate={(page) => setCurrentPage(page)} />}
           {!isRepartidor && currentPage === 'routes' && <RouteMap onNavigate={setCurrentPage} />}
           {!isRepartidor && currentPage === 'new-route' && <NewRoute onNavigate={setCurrentPage} />}

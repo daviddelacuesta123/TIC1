@@ -34,7 +34,10 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
         <li className={currentPage === 'dashboard' ? 'active' : ''} onClick={() => onNavigate('dashboard')}>Dashboard</li>
         
         {isRepartidor && (
-          <li className={currentPage === 'repartidor-pedidos' ? 'active' : ''} onClick={() => onNavigate('repartidor-pedidos')}>Historial de Pedidos</li>
+          <>
+            <li className={currentPage === 'repartidor-pedidos' ? 'active' : ''} onClick={() => onNavigate('repartidor-pedidos')}>Historial de Pedidos</li>
+            <li className={currentPage === 'repartidor-mapa' ? 'active' : ''} onClick={() => onNavigate('repartidor-mapa')}>Mi Ruta</li>
+          </>
         )}
         
         {!isRepartidor && (
