@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Sidebar from './components/layout/Sidebar'
 import Header from './components/layout/Header'
+import RepartidorLayout from './components/layout/RepartidorLayout'
 import Dashboard from './pages/Dashboard'
 import Shipments from './pages/Shipments'
 import RouteMap from './pages/RouteMap'
@@ -42,23 +43,26 @@ function AppContent() {
 
   const isRepartidor = user.rol === 'REPARTIDOR'
 
+  // Repartidor gets a dedicated mobile layout
+  if (isRepartidor) {
+    return <RepartidorLayout currentPage={currentPage} onNavigate={setCurrentPage} />
+  }
+
   return (
     <div className="app-container">
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       <main className="main-content">
         <Header />
         <div className="page-content">
-          {currentPage === 'dashboard' && (isRepartidor ? <RepartidorDashboard onNavigate={setCurrentPage} /> : <Dashboard />)}
-          {currentPage === 'repartidor-pedidos' && isRepartidor && <RepartidorPedidos />}
-          {currentPage === 'repartidor-mapa' && isRepartidor && <RepartidorMapa />}
-          {!isRepartidor && currentPage === 'shipments' && <Shipments onNavigate={(page) => setCurrentPage(page)} />}
-          {!isRepartidor && currentPage === 'routes' && <RouteMap onNavigate={setCurrentPage} />}
-          {!isRepartidor && currentPage === 'new-route' && <NewRoute onNavigate={setCurrentPage} />}
-          {!isRepartidor && currentPage === 'vehicles' && <Vehicles onNavigate={(page) => setCurrentPage(page)} />}
-          {!isRepartidor && currentPage === 'new-vehicle' && <NewVehicle onNavigate={(page) => setCurrentPage(page)} />}
-          {!isRepartidor && currentPage === 'repartidores' && <Repartidores onNavigate={(page) => setCurrentPage(page)} />}
-          {!isRepartidor && currentPage === 'new-repartidor' && <NewRepartidor onNavigate={(page) => setCurrentPage(page)} />}
-          {!isRepartidor && currentPage === 'new-shipment' && <NewShipment onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'dashboard' && <Dashboard />}
+          {currentPage === 'shipments' && <Shipments onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'routes' && <RouteMap onNavigate={setCurrentPage} />}
+          {currentPage === 'new-route' && <NewRoute onNavigate={setCurrentPage} />}
+          {currentPage === 'vehicles' && <Vehicles onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'new-vehicle' && <NewVehicle onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'repartidores' && <Repartidores onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'new-repartidor' && <NewRepartidor onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'new-shipment' && <NewShipment onNavigate={(page) => setCurrentPage(page)} />}
         </div>
       </main>
     </div>
