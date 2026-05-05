@@ -1,9 +1,10 @@
 package com.logistica.logistica_urbana.infrastructure.web.controller;
 
-import  com.logistica.logistica_urbana.application.service.PedidoUseCase;
-import  com.logistica.logistica_urbana.domain.model.entities.Pedido;
-import  com.logistica.logistica_urbana.infrastructure.web.dto.request.PedidoRequestDTO;
-import  com.logistica.logistica_urbana.infrastructure.web.dto.response.PedidoResponseDTO;
+import com.logistica.logistica_urbana.application.dto.request.PedidoRequestDTO;
+import com.logistica.logistica_urbana.application.dto.response.PedidoResponseDTO;
+import com.logistica.logistica_urbana.application.service.PedidoUseCase;
+import com.logistica.logistica_urbana.domain.model.entities.Pedido;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class PedidoController {
                 .pesoTotal(requestDTO.getPesoTotal())
                 .volumenTotal(requestDTO.getVolumenTotal())
                 .build();
-                
+
         Pedido creado = pedidoUseCase.crearPedido(pedido);
         return new ResponseEntity<>(toResponseDTO(creado), HttpStatus.CREATED);
     }
@@ -50,15 +51,17 @@ public class PedidoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PedidoResponseDTO> actualizarPedido(@PathVariable Long id, @RequestBody PedidoRequestDTO requestDTO) {
+    public ResponseEntity<PedidoResponseDTO> actualizarPedido(@PathVariable Long id,
+            @RequestBody PedidoRequestDTO requestDTO) {
         Pedido pedido = Pedido.builder()
                 .idDestinatario(requestDTO.getIdDestinatario())
                 .idDireccion(requestDTO.getIdDireccion())
                 .pesoTotal(requestDTO.getPesoTotal())
                 .volumenTotal(requestDTO.getVolumenTotal())
-                // No se actualiza el estado directamente aquí sin validaciones adicionales, pero si se envía, se maneja en UseCase.
+                // No se actualiza el estado directamente aquí sin validaciones adicionales,
+                // pero si se envía, se maneja en UseCase.
                 .build();
-                
+
         Pedido actualizado = pedidoUseCase.actualizarPedido(id, pedido);
         return ResponseEntity.ok(toResponseDTO(actualizado));
     }

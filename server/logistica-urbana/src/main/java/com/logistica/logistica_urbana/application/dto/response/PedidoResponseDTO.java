@@ -1,4 +1,4 @@
-package com.logistica.logistica_urbana.infrastructure.web.dto.response;
+package com.logistica.logistica_urbana.application.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @Builder
 public class PedidoResponseDTO {
     private Long id;
-    private Integer idDestinatario;
-    private Integer idDireccion;
+    private Long idDestinatario;
+    private Long idDireccion;
     private Double pesoTotal;
     private Double volumenTotal;
     private String estado;
