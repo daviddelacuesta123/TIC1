@@ -25,7 +25,6 @@ public class PedidoController {
 
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> crearPedido(@RequestBody PedidoRequestDTO requestDTO) {
-        // Pasa el DTO directo al caso de uso
         Pedido creado = pedidoUseCase.crearPedido(requestDTO);
         return new ResponseEntity<>(toResponseDTO(creado), HttpStatus.CREATED);
     }
@@ -46,7 +45,6 @@ public class PedidoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PedidoResponseDTO> actualizarPedido(@PathVariable Long id, @RequestBody PedidoRequestDTO requestDTO) {
-        // Pasa el DTO directo al caso de uso
         Pedido actualizado = pedidoUseCase.actualizarPedido(id, requestDTO);
         return ResponseEntity.ok(toResponseDTO(actualizado));
     }

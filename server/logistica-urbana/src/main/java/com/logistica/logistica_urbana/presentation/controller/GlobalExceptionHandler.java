@@ -1,5 +1,7 @@
 package com.logistica.logistica_urbana.presentation.controller;
 
+import com.logistica.logistica_urbana.domain.exception.RepartidorInvalidoException;
+import com.logistica.logistica_urbana.domain.exception.RepartidorNoEncontradoException;
 import com.logistica.logistica_urbana.domain.exception.VehiculoInactivoException;
 import com.logistica.logistica_urbana.domain.exception.VehiculoNoEncontradoException;
 import org.springframework.http.HttpStatus;
@@ -62,6 +64,20 @@ public class GlobalExceptionHandler {
             VehiculoInactivoException ex, WebRequest request) {
         return construirRespuesta(HttpStatus.CONFLICT, ex.getMessage(),
             "VEHICULO_INACTIVO", request);
+    }
+
+    @ExceptionHandler(RepartidorNoEncontradoException.class)
+    public ResponseEntity<Map<String, Object>> manejarRepartidorNoEncontrado(
+            RepartidorNoEncontradoException ex, WebRequest request) {
+        return construirRespuesta(HttpStatus.NOT_FOUND, ex.getMessage(),
+            "ENTIDAD_NO_ENCONTRADA", request);
+    }
+
+    @ExceptionHandler(RepartidorInvalidoException.class)
+    public ResponseEntity<Map<String, Object>> manejarRepartidorInvalido(
+            RepartidorInvalidoException ex, WebRequest request) {
+        return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage(),
+            "VALIDACION_DOMINIO", request);
     }
 
     /**
