@@ -1,3 +1,5 @@
+import { apiFetch } from './authService'
+
 export interface RepartidorResponseDTO {
   id: number
   idUsuario: number
@@ -6,7 +8,7 @@ export interface RepartidorResponseDTO {
   apellido: string
   telefono: string
   correoElectronico: string
-  estado: string
+  estado: boolean
 }
 
 export interface RepartidorCreatePayload {
@@ -16,7 +18,11 @@ export interface RepartidorCreatePayload {
   apellido: string
   telefono: string
   correoElectronico: string
-  estado: string
+}
+
+export interface RegistrarUsuarioResponse {
+  id: number
+  username: string
 }
 
 export interface RepartidorUpdatePayload {
@@ -26,66 +32,78 @@ export interface RepartidorUpdatePayload {
   apellido?: string
   telefono?: string
   correoElectronico?: string
-  estado?: string
 }
 
-const STORAGE_KEY = 'repartidores_logistica'
-
-function getPersistedRepartidores(): RepartidorResponseDTO[] {
-  const raw = localStorage.getItem(STORAGE_KEY)
-  if (!raw) {
-    return []
-  }
-  try {
-    return JSON.parse(raw) as RepartidorResponseDTO[]
-  } catch {
-    localStorage.removeItem(STORAGE_KEY)
-    return []
-  }
+export interface AsignacionVehiculoResponseDTO {
+  idRepartidorVehiculo: number
+  idRepartidor: number
+  idVehiculo: number
+  fechaAsignacion: string
 }
 
-function persistRepartidores(value: RepartidorResponseDTO[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
+export function listarRepartidores(): Promise<RepartidorResponseDTO[]> {
+  return apiFetch<RepartidorResponseDTO[]>('/api/repartidores')
 }
 
-function nextId(current: RepartidorResponseDTO[]) {
-  return current.reduce((maxId, repartidor) => Math.max(maxId, repartidor.id), 0) + 1
+export function obtenerRepartidor(id: number): Promise<RepartidorResponseDTO> {
+  return apiFetch<RepartidorResponseDTO>(`/api/repartidores/${id}`)
 }
 
-export async function listarRepartidores(): Promise<RepartidorResponseDTO[]> {
-  return Promise.resolve(getPersistedRepartidores())
+export function registrarUsuarioRepartidor(username: string, password: string): Promise<RegistrarUsuarioResponse> {
+  return apiFetch<RegistrarUsuarioResponse>('/api/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ username, password, rol: 'REPARTIDOR' }),
+  })
 }
 
-export async function crearRepartidor(
-  payload: RepartidorCreatePayload,
-): Promise<RepartidorResponseDTO> {
-  const current = getPersistedRepartidores()
-  const nuevo: RepartidorResponseDTO = {
-    id: nextId(current),
-    ...payload,
-  }
-  persistRepartidores([...current, nuevo])
-  return Promise.resolve(nuevo)
+export function crearRepartidor(payload: RepartidorCreatePayload): Promise<RepartidorResponseDTO> {
+  return apiFetch<RepartidorResponseDTO>('/api/repartidores', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
 }
 
-export async function actualizarRepartidor(
+export function actualizarRepartidor(
   id: number,
   payload: RepartidorUpdatePayload,
 ): Promise<RepartidorResponseDTO> {
-  const current = getPersistedRepartidores()
-  const index = current.findIndex(r => r.id === id)
-  if (index === -1) {
-    return Promise.reject(new Error('Repartidor no encontrado'))
-  }
-  const actualizado = { ...current[index], ...payload }
-  current[index] = actualizado
-  persistRepartidores(current)
-  return Promise.resolve(actualizado)
+  return apiFetch<RepartidorResponseDTO>(`/api/repartidores/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
 }
 
-export async function borrarRepartidor(id: number): Promise<void> {
-  const current = getPersistedRepartidores()
-  const actualizado = current.filter(r => r.id !== id)
-  persistRepartidores(actualizado)
-  return Promise.resolve()
+export function borrarRepartidor(id: number): Promise<null> {
+  return apiFetch<null>(`/api/repartidores/${id}`, { method: 'DELETE' })
+}
+
+export function asignarVehiculo(
+  idRepartidor: number,
+  idVehiculo: number,
+): Promise<AsignacionVehiculoResponseDTO> {
+  return apiFetch<AsignacionVehiculoResponseDTO>(`/api/repartidores/${idRepartidor}/vehiculo`, {
+    method: 'POST',
+    body: JSON.stringify({ idVehiculo }),
+  })
+}
+
+export async function obtenerVehiculo(id: number): Promise<AsignacionVehiculoResponseDTO | null> {
+  const token = localStorage.getItem('auth_token')
+  const res = await fetch(`/api/repartidores/${id}/vehiculo`, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  })
+  if (res.status === 404) return null
+  if (res.status === 401) {
+    localStorage.removeItem('auth_token')
+    window.dispatchEvent(new CustomEvent('auth:logout'))
+    throw new Error('Sesión expirada')
+  }
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as { error?: string }).error ?? `Error ${res.status}`)
+  }
+  return res.json() as Promise<AsignacionVehiculoResponseDTO>
 }

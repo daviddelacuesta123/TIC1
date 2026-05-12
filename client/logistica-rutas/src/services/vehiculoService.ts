@@ -65,52 +65,40 @@ export interface VehiculoUpdatePayload {
   costoPorKm?: number
 }
 
-async function handleResponse<T>(res: Response): Promise<T> {
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error(body.message ?? `Error ${res.status}`)
-  }
-  return res.json()
+export function listarVehiculos(): Promise<VehiculoResponseDTO[]> {
+  return apiFetch<VehiculoResponseDTO[]>('/api/vehiculos')
 }
 
-export async function listarVehiculos(): Promise<VehiculoResponseDTO[]> {
-  const res = await apiFetch('/api/vehiculos')
-  return handleResponse<VehiculoResponseDTO[]>(res)
+export async function listarVehiculosActivos(): Promise<VehiculoResponseDTO[]> {
+  const todos = await apiFetch<VehiculoResponseDTO[]>('/api/vehiculos')
+  return todos.filter(v => v.activo)
 }
 
-export async function crearVehiculo(payload: VehiculoCreatePayload): Promise<VehiculoResponseDTO> {
-  const res = await apiFetch('/api/vehiculos', {
+export function crearVehiculo(payload: VehiculoCreatePayload): Promise<VehiculoResponseDTO> {
+  return apiFetch<VehiculoResponseDTO>('/api/vehiculos', {
     method: 'POST',
     body: JSON.stringify(payload),
   })
-  return handleResponse<VehiculoResponseDTO>(res)
 }
 
-export async function actualizarVehiculo(
+export function actualizarVehiculo(
   id: number,
   payload: VehiculoUpdatePayload,
 ): Promise<VehiculoResponseDTO> {
-  const res = await apiFetch(`/api/vehiculos/${id}`, {
+  return apiFetch<VehiculoResponseDTO>(`/api/vehiculos/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(payload),
   })
-  return handleResponse<VehiculoResponseDTO>(res)
 }
 
-export async function darDeBajaVehiculo(id: number): Promise<void> {
-  const res = await apiFetch(`/api/vehiculos/${id}`, { method: 'DELETE' })
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error(body.message ?? `Error ${res.status}`)
-  }
+export function darDeBajaVehiculo(id: number): Promise<null> {
+  return apiFetch<null>(`/api/vehiculos/${id}`, { method: 'DELETE' })
 }
 
-export async function listarModelos(): Promise<ModeloDTO[]> {
-  const res = await apiFetch('/api/vehiculos/modelos')
-  return handleResponse<ModeloDTO[]>(res)
+export function listarModelos(): Promise<ModeloDTO[]> {
+  return apiFetch<ModeloDTO[]>('/api/vehiculos/modelos')
 }
 
-export async function listarMarcas(): Promise<MarcaDTO[]> {
-  const res = await apiFetch('/api/vehiculos/marcas')
-  return handleResponse<MarcaDTO[]>(res)
+export function listarMarcas(): Promise<MarcaDTO[]> {
+  return apiFetch<MarcaDTO[]>('/api/vehiculos/marcas')
 }

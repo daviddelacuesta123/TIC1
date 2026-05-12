@@ -59,6 +59,8 @@ public class RepartidorController {
 
     @GetMapping("/{id}/vehiculo")
     public ResponseEntity<AsignacionVehiculoResponseDTO> obtenerVehiculoActual(@PathVariable Integer id) {
-        return ResponseEntity.ok(repartidorService.obtenerAsignacionActual(id));
+        AsignacionVehiculoResponseDTO asignacion = repartidorService.obtenerAsignacionActual(id);
+        if (asignacion == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(asignacion);
     }
 }

@@ -26,7 +26,7 @@ import org.mapstruct.Mapping;
  * @see Vehiculo
  * @see VehiculoEntity
  */
-@Mapper(componentModel = "spring")
+@Mapper
 public interface VehiculoMapper {
 
     /**

@@ -9,4 +9,5 @@ public interface IPedidoRepositoryPort {
     Optional<Pedido> findById(Long id);
     List<Pedido> findAll();
     void deleteById(Long id);
+    List<Pedido> findByRutaId(Long idRuta);
 }

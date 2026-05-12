@@ -1,57 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
-import './RouteMap.css'; // Reusing layout CSS
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import './RouteMap.css';
 import './NewRoute.css';
-
-// Minimal Leaflet types and map initialization
-async function loadRoutingLeaflet() {
-  if (!document.getElementById('leaflet-css')) {
-    const link = document.createElement('link');
-    link.id = 'leaflet-css';
-    link.rel = 'stylesheet';
-    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-    document.head.appendChild(link);
-  }
-  if (!document.getElementById('leaflet-routing-css')) {
-    const link = document.createElement('link');
-    link.id = 'leaflet-routing-css';
-    link.rel = 'stylesheet';
-    link.href = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css';
-    document.head.appendChild(link);
-  }
-
-  if (!(window as any)['L']) {
-    await new Promise<void>((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Leaflet load failed'));
-      document.head.appendChild(script);
-    });
-  }
-  
-  if (!(window as any)['L']?.Routing) {
-    await new Promise<void>((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js';
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Leaflet Routing Machine load failed'));
-      document.head.appendChild(script);
-    });
-  }
-  
-  return (window as any)['L'];
-}
+import { geocodificar } from '../services/geoService';
 
 interface NewRouteProps {
   onNavigate?: (page: 'dashboard' | 'shipments' | 'routes' | 'new-route') => void;
-}
-
-interface AddressResult {
-  place_id: string;
-  display_name: string;
-  lat: string;
-  lon: string;
 }
 
 interface Stop {
@@ -66,214 +21,151 @@ const DEPOT = { lat: 6.2476, lng: -75.5709, name: 'Depósito Central' };
 
 export default function NewRoute({ onNavigate }: NewRouteProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const leafletMapRef = useRef<any>(null);
-  const routingControlsRef = useRef<any[]>([]);
-  const markersRef = useRef<any[]>([]);
-  
-  const [leaflet, setLeaflet] = useState<any>(null);
+  const leafletMapRef = useRef<L.Map | null>(null);
+  const polylinesRef = useRef<L.Polyline[]>([]);
+  const markersRef = useRef<L.CircleMarker[]>([]);
   const [mapReady, setMapReady] = useState(false);
 
-  // Form State
   const [driversCount, setDriversCount] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<AddressResult[]>([]);
   const [stops, setStops] = useState<Stop[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [geoError, setGeoError] = useState<string | null>(null);
 
-  // Load Leaflet and Map
   useEffect(() => {
-    loadRoutingLeaflet().then(setLeaflet).catch(console.error);
+    if (!mapRef.current || leafletMapRef.current) return;
+    const map = L.map(mapRef.current, { center: [DEPOT.lat, DEPOT.lng], zoom: 12 });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors',
+    }).addTo(map);
+    L.circleMarker([DEPOT.lat, DEPOT.lng], {
+      radius: 10, fillColor: '#111827', color: 'white', weight: 2, fillOpacity: 1,
+    }).addTo(map).bindPopup('Depósito Central');
+    leafletMapRef.current = map;
+    setMapReady(true);
+    return () => { map.remove(); leafletMapRef.current = null; };
   }, []);
 
-  useEffect(() => {
-    if (!leaflet || !mapRef.current || leafletMapRef.current) return;
-    const map = leaflet.map(mapRef.current, {
-      center: [DEPOT.lat, DEPOT.lng],
-      zoom: 12,
-    });
-    leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Initial Marker
-    leaflet.marker([DEPOT.lat, DEPOT.lng]).addTo(map).bindPopup('Depósito Central (Mendoza)');
-
-    leafletMapRef.current = map;
-    setTimeout(() => setMapReady(true), 0);
-
-    return () => {
-      map.remove();
-      leafletMapRef.current = null;
-    };
-  }, [leaflet]);
-
-  // Autocomplete search
-  useEffect(() => {
-    if (!searchQuery || searchQuery.length < 3) {
-      setTimeout(() => setSuggestions([]), 0);
-      return;
+  async function handleSearch() {
+    const q = searchQuery.trim();
+    if (!q) return;
+    setIsSearching(true);
+    setGeoError(null);
+    try {
+      const ciudad = q.toLowerCase().includes('medellín') || q.toLowerCase().includes('medellin')
+        ? '' : 'Medellín';
+      const coords = await geocodificar(q, ciudad);
+      const newStop: Stop = {
+        id: `${q}-${coords.latitud}-${coords.longitud}`,
+        name: q,
+        lat: coords.latitud,
+        lng: coords.longitud,
+      };
+      if (!stops.some(s => s.id === newStop.id)) setStops(prev => [...prev, newStop]);
+      setSearchQuery('');
+    } catch {
+      setGeoError('No se pudo geocodificar la dirección. Intenta con más detalle.');
+    } finally {
+      setIsSearching(false);
     }
-    const delayDebounceFn = setTimeout(() => {
-      setIsSearching(true);
-      // Apend Medellin to query if not present
-      const query = searchQuery.toLowerCase().includes('medellin') 
-        ? searchQuery 
-        : `${searchQuery}, Medellín, Colombia`;
-        
-      fetch(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&singleLine=${encodeURIComponent(query)}&maxLocations=8`)
-        .then(res => res.json())
-        .then((data) => {
-          if (data.candidates) {
-            const results = data.candidates.map((c: any) => ({
-              place_id: c.address + c.location.x,
-              display_name: c.address,
-              lat: c.location.y.toString(),
-              lon: c.location.x.toString()
-            }));
-            setSuggestions(results);
-          } else {
-            setSuggestions([]);
-          }
-          setIsSearching(false);
-        }).catch(() => setIsSearching(false));
-    }, 600);
+  }
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery]);
+  const removeStop = (id: string) => setStops(stops.filter(s => s.id !== id));
 
-  const addStop = (item: AddressResult) => {
-    const newStop: Stop = {
-      id: item.place_id,
-      name: item.display_name,
-      lat: parseFloat(item.lat),
-      lng: parseFloat(item.lon)
-    };
-    if (!stops.some(s => s.id === newStop.id)) {
-      setStops([...stops, newStop]);
-    }
-    setSearchQuery('');
-    setSuggestions([]);
-  };
-
-  const removeStop = (id: string) => {
-    setStops(stops.filter(s => s.id !== id));
-  };
-
-  // Draw routes dynamically based on drivers count and stops
   useEffect(() => {
-    if (!leaflet || !mapReady || !leafletMapRef.current) return;
+    if (!mapReady || !leafletMapRef.current) return;
     const map = leafletMapRef.current;
 
-    // Remove old routing controls and markers
-    routingControlsRef.current.forEach(control => map.removeControl(control));
-    routingControlsRef.current = [];
-    markersRef.current.forEach(marker => map.removeLayer(marker));
+    polylinesRef.current.forEach(p => map.removeLayer(p));
+    polylinesRef.current = [];
+    markersRef.current.forEach(m => map.removeLayer(m));
     markersRef.current = [];
 
     if (stops.length === 0) return;
 
-    // Draw markers for all stops
-    stops.forEach((stop) => {
-      const marker = leaflet.circleMarker([stop.lat, stop.lng], {
-        radius: 8,
-        fillColor: '#10b981',
-        color: '#fff',
-        weight: 2,
-        fillOpacity: 1
-      }).bindPopup(`<div style="font-size:13px"><strong>${stop.name}</strong></div>`);
-      map.addLayer(marker);
+    stops.forEach(stop => {
+      const marker = L.circleMarker([stop.lat, stop.lng], {
+        radius: 8, fillColor: '#10b981', color: '#fff', weight: 2, fillOpacity: 1,
+      }).bindPopup(`<div style="font-size:13px"><strong>${stop.name}</strong></div>`).addTo(map);
       markersRef.current.push(marker);
     });
 
-    // Simple partitioning: distribute stops evenly among drivers
     const chunks: Stop[][] = Array.from({ length: driversCount }, () => []);
     stops.forEach((stop, i) => chunks[i % driversCount].push(stop));
 
     chunks.forEach((chunk, i) => {
       if (chunk.length === 0) return;
-      
-      const waypoints = [
-        leaflet.latLng(DEPOT.lat, DEPOT.lng),
-        ...chunk.map(c => leaflet.latLng(c.lat, c.lng))
+      const latlngs: L.LatLngTuple[] = [
+        [DEPOT.lat, DEPOT.lng],
+        ...chunk.map(c => [c.lat, c.lng] as L.LatLngTuple),
       ];
-
-      const control = leaflet.Routing.control({
-        waypoints,
-        lineOptions: {
-          styles: [{ color: COLORS[i % COLORS.length], weight: 4, opacity: 0.8 }]
-        },
-        createMarker: function() { return null; }, // hide default markers since we can just use the line
-        addWaypoints: false,
-        routeWhileDragging: false,
-        show: false, // Don't show text itinerary
-        fitSelectedRoutes: true
+      const pl = L.polyline(latlngs, {
+        color: COLORS[i % COLORS.length], weight: 4, opacity: 0.8,
       }).addTo(map);
-
-      routingControlsRef.current.push(control);
+      polylinesRef.current.push(pl);
     });
 
-  }, [leaflet, mapReady, stops, driversCount]);
+    const allCoords: L.LatLngTuple[] = stops.map(s => [s.lat, s.lng]);
+    if (allCoords.length > 0) map.fitBounds(L.latLngBounds(allCoords), { padding: [40, 40] });
+  }, [mapReady, stops, driversCount]);
 
   return (
     <div className="new-route-page route-map-page">
       <div className="route-map-header">
         <div>
-          <h2>Crear Nueva Ruta</h2>
-          <p>Asigna las direcciones a una cantidad definida de repartidores.</p>
+          <h2>Previsualizar Ruta</h2>
+          <p>Agrega direcciones manualmente para ver la distribución en el mapa.</p>
         </div>
         <div className="route-map-actions">
           <button className="btn-secondary" onClick={() => onNavigate && onNavigate('routes')}>
             Ver mis rutas
           </button>
-          <button className="btn-primary" onClick={() => onNavigate && onNavigate('routes')}>
-            Guardar Rutas
-          </button>
         </div>
       </div>
 
       <div className="route-map-body">
-        {/* Left Form Panel */}
         <div className="route-sidebar new-route-form">
           <div className="sidebar-card">
             <h3>Configuración</h3>
             <div className="form-group drivers-count-group">
               <label>Cantidad de Repartidores</label>
-              <input 
-                type="number" 
-                min="1" 
-                max="10" 
-                value={driversCount}
+              <input
+                type="number" min="1" max="10" value={driversCount}
                 onChange={e => setDriversCount(Math.max(1, parseInt(e.target.value) || 1))}
               />
             </div>
           </div>
 
           <div className="sidebar-card address-card">
-            <h3>1. Agregar Direcciones</h3>
+            <h3>Agregar Direcciones</h3>
             <p className="instruction-text">
-              Busca las direcciones a entregar. Se distribuirán automáticamente entre los repartidores.
+              Escribe una dirección y pulsa "Agregar". Se geocodificará con el servidor.
             </p>
             <div className="search-container">
               <input
                 type="text"
-                placeholder="Busca una dirección (Ej: Medellín, Poblado...)"
+                placeholder="Ej: Calle 10 #43-12, Medellín"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={e => { setSearchQuery(e.target.value); setGeoError(null); }}
+                onKeyDown={e => e.key === 'Enter' && handleSearch()}
                 className="address-input"
               />
-              {isSearching && <div className="searching-indicator">Buscando...</div>}
-              {suggestions.length > 0 && (
-                <ul className="suggestions-list">
-                  {suggestions.map(s => (
-                    <li key={s.place_id} onClick={() => addStop(s)}>
-                      {s.display_name}
-                    </li>
-                  ))}
-                </ul>
+              <button
+                onClick={handleSearch}
+                disabled={isSearching || !searchQuery.trim()}
+                style={{
+                  marginTop: '0.5rem', width: '100%', padding: '0.6rem',
+                  background: '#09b4db', border: 'none', borderRadius: 8,
+                  color: 'white', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem',
+                }}
+              >
+                {isSearching ? 'Geocodificando…' : 'Agregar dirección'}
+              </button>
+              {geoError && (
+                <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.4rem' }}>{geoError}</p>
               )}
             </div>
-
             <div className="stops-list-container">
               <h4>Direcciones Asignadas ({stops.length})</h4>
               {stops.length === 0 ? (
@@ -283,9 +175,7 @@ export default function NewRoute({ onNavigate }: NewRouteProps) {
                   {stops.map(stop => (
                     <li key={stop.id}>
                       <span>{stop.name}</span>
-                      <button onClick={() => removeStop(stop.id)} className="remove-btn">
-                        &times;
-                      </button>
+                      <button onClick={() => removeStop(stop.id)} className="remove-btn">&times;</button>
                     </li>
                   ))}
                 </ul>
@@ -294,7 +184,6 @@ export default function NewRoute({ onNavigate }: NewRouteProps) {
           </div>
         </div>
 
-        {/* Map Panel */}
         <div className="route-map-container">
           <div ref={mapRef} className="map-wrapper" />
           <div className="map-legend">
@@ -302,7 +191,9 @@ export default function NewRoute({ onNavigate }: NewRouteProps) {
             {Array.from({ length: Math.min(driversCount, stops.length) }).map((_, idx) => (
               <div key={idx} className="legend-item">
                 <div className="legend-dot" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
-                <span>Repartidor {idx + 1} ({stops.filter((_, i) => i % driversCount === idx).length} paradas)</span>
+                <span>
+                  Repartidor {idx + 1} ({stops.filter((_, i) => i % driversCount === idx).length} paradas)
+                </span>
               </div>
             ))}
           </div>

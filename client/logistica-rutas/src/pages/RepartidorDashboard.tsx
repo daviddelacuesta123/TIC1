@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Page } from '../../App';
+import type { Page } from '../App';
 import './RepartidorDashboard.css';
 
 interface Props {

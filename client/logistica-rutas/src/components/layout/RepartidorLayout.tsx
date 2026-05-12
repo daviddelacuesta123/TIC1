@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactElement } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import type { Page } from '../../App';
 import RepartidorDashboard from '../../pages/RepartidorDashboard';
@@ -11,7 +11,7 @@ interface Props {
   onNavigate: (page: Page) => void;
 }
 
-const NAV_ITEMS: { page: Page; label: string; icon: JSX.Element }[] = [
+const NAV_ITEMS: { page: Page; label: string; icon: ReactElement }[] = [
   {
     page: 'dashboard',
     label: 'Dashboard',

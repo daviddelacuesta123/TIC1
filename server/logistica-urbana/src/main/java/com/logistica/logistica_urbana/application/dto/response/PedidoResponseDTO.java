@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @Builder
 public class PedidoResponseDTO {
     private Long id;
-    private Integer idDestinatario;
-    private Integer idDireccion;
+    private DestinatarioResponseDTO destinatario;
+    private DireccionResponseDTO direccion;
     private Double pesoTotal;
     private Double volumenTotal;
     private String estado;

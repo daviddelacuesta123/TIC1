@@ -1,43 +1,36 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import './Repartidores.css'
 import '../App.css'
-import {
-  crearRepartidor,
-  type RepartidorCreatePayload,
-} from '../services/repartidorService'
+import { crearRepartidor, registrarUsuarioRepartidor } from '../services/repartidorService'
 
 interface NewRepartidorProps {
   onNavigate: (page: 'repartidores') => void
 }
 
-const ESTADOS = ['ACTIVO', 'INACTIVO'] as const
-
-type RepartidorEstado = (typeof ESTADOS)[number]
-
 interface FormState {
-  idUsuario: string
+  username: string
+  password: string
   dni: string
   nombre: string
   apellido: string
   telefono: string
   correoElectronico: string
-  estado: RepartidorEstado
 }
 
 export default function NewRepartidor({ onNavigate }: NewRepartidorProps) {
   const [form, setForm] = useState<FormState>({
-    idUsuario: '',
+    username: '',
+    password: '',
     dni: '',
     nombre: '',
     apellido: '',
     telefono: '',
     correoElectronico: '',
-    estado: 'ACTIVO',
   })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
   }
@@ -48,16 +41,19 @@ export default function NewRepartidor({ onNavigate }: NewRepartidorProps) {
     setSubmitting(true)
 
     try {
-      const payload: RepartidorCreatePayload = {
-        idUsuario: parseInt(form.idUsuario, 10),
+      // 1. Crear cuenta de usuario con rol REPARTIDOR
+      const usuario = await registrarUsuarioRepartidor(form.username, form.password)
+
+      // 2. Crear el repartidor vinculado a esa cuenta
+      await crearRepartidor({
+        idUsuario: usuario.id,
         dni: form.dni,
         nombre: form.nombre,
         apellido: form.apellido,
         telefono: form.telefono,
         correoElectronico: form.correoElectronico,
-        estado: form.estado,
-      }
-      await crearRepartidor(payload)
+      })
+
       onNavigate('repartidores')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al crear el repartidor')
@@ -75,32 +71,28 @@ export default function NewRepartidor({ onNavigate }: NewRepartidorProps) {
       {error && <div className="error-banner">{error}</div>}
 
       <form className="create-form" onSubmit={handleSubmit}>
+
         <div className="form-section-title">
           <h2>Datos de cuenta</h2>
         </div>
 
         <div className="form-row">
           <div className="form-col">
-            <label htmlFor="idUsuario">ID Usuario *</label>
+            <label htmlFor="username">Usuario *</label>
             <input
-              id="idUsuario"
-              name="idUsuario"
-              type="number"
-              min={1}
-              value={form.idUsuario}
-              onChange={handleChange}
+              id="username" name="username" type="text"
+              value={form.username} onChange={handleChange}
+              placeholder="Nombre de usuario para iniciar sesión"
               required
             />
           </div>
-
           <div className="form-col">
-            <label htmlFor="dni">DNI *</label>
+            <label htmlFor="password">Contraseña *</label>
             <input
-              id="dni"
-              name="dni"
-              value={form.dni}
-              onChange={handleChange}
-              required
+              id="password" name="password" type="password"
+              value={form.password} onChange={handleChange}
+              placeholder="Contraseña de acceso"
+              required minLength={6}
             />
           </div>
         </div>
@@ -113,60 +105,48 @@ export default function NewRepartidor({ onNavigate }: NewRepartidorProps) {
           <div className="form-col">
             <label htmlFor="nombre">Nombre *</label>
             <input
-              id="nombre"
-              name="nombre"
-              value={form.nombre}
-              onChange={handleChange}
-              required
+              id="nombre" name="nombre" value={form.nombre}
+              onChange={handleChange} required
+              placeholder="Nombre del repartidor"
             />
           </div>
-
           <div className="form-col">
             <label htmlFor="apellido">Apellido *</label>
             <input
-              id="apellido"
-              name="apellido"
-              value={form.apellido}
-              onChange={handleChange}
-              required
+              id="apellido" name="apellido" value={form.apellido}
+              onChange={handleChange} required
+              placeholder="Apellido del repartidor"
             />
           </div>
         </div>
 
         <div className="form-row">
           <div className="form-col">
-            <label htmlFor="telefono">Teléfono</label>
+            <label htmlFor="dni">DNI *</label>
             <input
-              id="telefono"
-              name="telefono"
-              value={form.telefono}
-              onChange={handleChange}
+              id="dni" name="dni" value={form.dni}
+              onChange={handleChange} required
+              placeholder="Número de documento"
             />
           </div>
-
           <div className="form-col">
+            <label htmlFor="telefono">Teléfono *</label>
+            <input
+              id="telefono" name="telefono" value={form.telefono}
+              onChange={handleChange} required
+              placeholder="Ej: 3001234567"
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-col" style={{ flex: 1 }}>
             <label htmlFor="correoElectronico">Correo electrónico *</label>
             <input
-              id="correoElectronico"
-              name="correoElectronico"
-              type="email"
-              value={form.correoElectronico}
-              onChange={handleChange}
-              required
+              id="correoElectronico" name="correoElectronico" type="email"
+              value={form.correoElectronico} onChange={handleChange}
+              required placeholder="correo@ejemplo.com"
             />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-col">
-            <label htmlFor="estado">Estado</label>
-            <select id="estado" name="estado" value={form.estado} onChange={handleChange}>
-              {ESTADOS.map(estado => (
-                <option key={estado} value={estado}>
-                  {estado}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
 
@@ -175,10 +155,8 @@ export default function NewRepartidor({ onNavigate }: NewRepartidorProps) {
             {submitting ? 'Guardando…' : 'Crear repartidor'}
           </button>
           <button
-            className="btn btn-secondary"
-            type="button"
-            onClick={() => onNavigate('repartidores')}
-            disabled={submitting}
+            className="btn btn-secondary" type="button"
+            onClick={() => onNavigate('repartidores')} disabled={submitting}
           >
             Volver
           </button>
