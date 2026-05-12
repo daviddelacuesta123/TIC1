@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Sidebar from './components/layout/Sidebar'
 import Header from './components/layout/Header'
@@ -8,43 +8,45 @@ import Shipments from './pages/Shipments'
 import RouteMap from './pages/RouteMap'
 import Login from './pages/Login'
 import NewRoute from './pages/NewRoute'
+import SesionDespacho from './pages/SesionDespacho'
 import Vehicles from './pages/Vehicles'
 import NewVehicle from './pages/NewVehicle'
 import NewRepartidor from './pages/NewRepartidor'
 import Repartidores from './pages/Repartidores'
 import NewShipment from './pages/NewShipment'
-import RepartidorDashboard from './pages/RepartidorDashboard'
-import RepartidorPedidos from './pages/RepartidorPedidos'
-import RepartidorMapa from './pages/RepartidorMapa'
+import Productos from './pages/Productos'
+import NewProducto from './pages/NewProducto'
 import './App.css'
-
 
 export type Page =
   | 'dashboard'
   | 'shipments'
   | 'routes'
   | 'new-route'
+  | 'sesion-despacho'
   | 'vehicles'
   | 'new-vehicle'
   | 'repartidores'
   | 'new-repartidor'
   | 'new-shipment'
+  | 'productos'
+  | 'new-producto'
   | 'repartidor-pedidos'
   | 'repartidor-mapa'
 
-
 function AppContent() {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const [currentPage, setCurrentPage] = useState<Page>('dashboard')
 
-  if (!user) {
-    return <Login />
-  }
+  useEffect(() => {
+    const manejarLogout = () => logout()
+    window.addEventListener('auth:logout', manejarLogout)
+    return () => window.removeEventListener('auth:logout', manejarLogout)
+  }, [logout])
 
-  const isRepartidor = user.rol === 'REPARTIDOR'
+  if (!user) return <Login />
 
-  // Repartidor gets a dedicated mobile layout
-  if (isRepartidor) {
+  if (user.rol === 'REPARTIDOR') {
     return <RepartidorLayout currentPage={currentPage} onNavigate={setCurrentPage} />
   }
 
@@ -54,15 +56,18 @@ function AppContent() {
       <main className="main-content">
         <Header />
         <div className="page-content">
-          {currentPage === 'dashboard' && <Dashboard />}
-          {currentPage === 'shipments' && <Shipments onNavigate={(page) => setCurrentPage(page)} />}
-          {currentPage === 'routes' && <RouteMap onNavigate={setCurrentPage} />}
-          {currentPage === 'new-route' && <NewRoute onNavigate={setCurrentPage} />}
-          {currentPage === 'vehicles' && <Vehicles onNavigate={(page) => setCurrentPage(page)} />}
-          {currentPage === 'new-vehicle' && <NewVehicle onNavigate={(page) => setCurrentPage(page)} />}
-          {currentPage === 'repartidores' && <Repartidores onNavigate={(page) => setCurrentPage(page)} />}
-          {currentPage === 'new-repartidor' && <NewRepartidor onNavigate={(page) => setCurrentPage(page)} />}
-          {currentPage === 'new-shipment' && <NewShipment onNavigate={(page) => setCurrentPage(page)} />}
+          {currentPage === 'dashboard'        && <Dashboard />}
+          {currentPage === 'shipments'        && <Shipments onNavigate={p => setCurrentPage(p)} />}
+          {currentPage === 'routes'           && <RouteMap onNavigate={setCurrentPage} />}
+          {currentPage === 'new-route'        && <NewRoute onNavigate={setCurrentPage} />}
+          {currentPage === 'sesion-despacho'  && <SesionDespacho onNavigate={setCurrentPage} />}
+          {currentPage === 'vehicles'         && <Vehicles onNavigate={p => setCurrentPage(p)} />}
+          {currentPage === 'new-vehicle'      && <NewVehicle onNavigate={p => setCurrentPage(p)} />}
+          {currentPage === 'repartidores'     && <Repartidores onNavigate={p => setCurrentPage(p)} />}
+          {currentPage === 'new-repartidor'   && <NewRepartidor onNavigate={p => setCurrentPage(p)} />}
+          {currentPage === 'new-shipment'     && <NewShipment onNavigate={p => setCurrentPage(p)} />}
+          {currentPage === 'productos'        && <Productos onNavigate={p => setCurrentPage(p)} />}
+          {currentPage === 'new-producto'     && <NewProducto onNavigate={p => setCurrentPage(p)} />}
         </div>
       </main>
     </div>
@@ -70,11 +75,7 @@ function AppContent() {
 }
 
 function App() {
-  return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
-  )
+  return <AuthProvider><AppContent /></AuthProvider>
 }
 
 export default App

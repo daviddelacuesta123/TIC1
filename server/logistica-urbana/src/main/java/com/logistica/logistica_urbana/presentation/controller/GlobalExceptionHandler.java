@@ -1,5 +1,7 @@
 package com.logistica.logistica_urbana.presentation.controller;
 
+import com.logistica.logistica_urbana.domain.exception.CoordenadaInvalidaException;
+import com.logistica.logistica_urbana.domain.exception.GeocodificacionFallidaException;
 import com.logistica.logistica_urbana.domain.exception.RepartidorInvalidoException;
 import com.logistica.logistica_urbana.domain.exception.RepartidorNoEncontradoException;
 import com.logistica.logistica_urbana.domain.exception.VehiculoInactivoException;
@@ -45,6 +47,20 @@ public class GlobalExceptionHandler {
      * @param request contexto de la petición HTTP
      * @return {@code 404 Not Found} con el formato estándar de error
      */
+    @ExceptionHandler(CoordenadaInvalidaException.class)
+    public ResponseEntity<Map<String, Object>> manejarCoordenadaInvalida(
+            CoordenadaInvalidaException ex, WebRequest request) {
+        return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage(),
+            "COORDENADA_INVALIDA", request);
+    }
+
+    @ExceptionHandler(GeocodificacionFallidaException.class)
+    public ResponseEntity<Map<String, Object>> manejarGeocodificacionFallida(
+            GeocodificacionFallidaException ex, WebRequest request) {
+        return construirRespuesta(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage(),
+            "GEOCODIFICACION_FALLIDA", request);
+    }
+
     @ExceptionHandler(VehiculoNoEncontradoException.class)
     public ResponseEntity<Map<String, Object>> manejarVehiculoNoEncontrado(
             VehiculoNoEncontradoException ex, WebRequest request) {

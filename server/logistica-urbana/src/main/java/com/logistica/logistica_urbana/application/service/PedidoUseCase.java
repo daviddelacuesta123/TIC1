@@ -5,6 +5,7 @@ import com.logistica.logistica_urbana.domain.model.entities.Pedido;
 import com.logistica.logistica_urbana.domain.port.IPedidoRepositoryPort;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class PedidoUseCase {
     }
 
     // Recibe DTO, retorna Entidad
+    @Transactional
     public Pedido crearPedido(PedidoRequestDTO dto) {
         Pedido nuevoPedido = Pedido.crearPedido(
                 dto.getIdDestinatario(),
@@ -38,6 +40,7 @@ public class PedidoUseCase {
     }
 
     // Recibe DTO, retorna Entidad
+    @Transactional
     public Pedido actualizarPedido(Long id, PedidoRequestDTO dto) {
         Pedido pedidoExistente = obtenerPedido(id);
         
@@ -51,7 +54,12 @@ public class PedidoUseCase {
         return pedidoRepositoryPort.save(pedidoExistente);
     }
 
+    @Transactional
     public void eliminarPedido(Long id) {
         pedidoRepositoryPort.deleteById(id);
+    }
+
+    public List<Pedido> listarPorRuta(Long idRuta) {
+        return pedidoRepositoryPort.findByRutaId(idRuta);
     }
 }

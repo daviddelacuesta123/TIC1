@@ -3,11 +3,13 @@ package com.logistica.logistica_urbana.presentation.controller;
 import com.logistica.logistica_urbana.application.dto.response.TrazabilidadResponseDTO;
 import com.logistica.logistica_urbana.application.service.TrazabilidadUseCase;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/trazabilidad")
-@CrossOrigin(origins = "*")
 public class TrazabilidadController {
 
     private final TrazabilidadUseCase trazabilidadUseCase;

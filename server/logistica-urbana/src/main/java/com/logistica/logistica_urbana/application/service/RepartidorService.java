@@ -91,10 +91,10 @@ public class RepartidorService {
 
     @Transactional
     public void eliminar(Integer id) {
-        if (!repartidorRepository.existsById(id)) {
-            throw new RepartidorNoEncontradoException(id);
-        }
-        repartidorRepository.deleteById(id);
+        Repartidor repartidor = repartidorRepository.findById(id)
+                .orElseThrow(() -> new RepartidorNoEncontradoException(id));
+        repartidor.desactivar();
+        repartidorRepository.save(repartidor);
     }
 
     @Transactional
@@ -130,12 +130,10 @@ public class RepartidorService {
             throw new RepartidorNoEncontradoException(idRepartidor);
         }
 
-        RepartidorVehiculoJpaEntity asignacion = repartidorVehiculoJpaRepository
+        return repartidorVehiculoJpaRepository
                 .findByRepartidorIdAndFechaFinIsNull(idRepartidor)
-                .orElseThrow(() -> new RepartidorInvalidoException(
-                        "El repartidor con id '" + idRepartidor + "' no tiene vehículo asignado actualmente"));
-
-        return toAsignacionDTO(asignacion);
+                .map(this::toAsignacionDTO)
+                .orElse(null);
     }
 
     private void validarUnicidad(RepartidorRequestDTO dto) {

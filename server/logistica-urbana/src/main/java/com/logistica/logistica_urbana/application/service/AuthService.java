@@ -30,7 +30,7 @@ public class AuthService {
     public String login(String username, String password) {
 
         Usuario usuario = usuarioRepository.findByUserName(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
 
         if (!passwordEncoder.matches(password, usuario.getPassword())) {
             throw new RuntimeException("Credenciales inválidas");
