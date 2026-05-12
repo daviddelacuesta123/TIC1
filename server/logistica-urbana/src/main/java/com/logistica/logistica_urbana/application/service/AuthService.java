@@ -59,10 +59,10 @@ public class AuthService {
                 rol
         );
 
-        usuarioRepository.save(usuario);
+        Usuario guardado = usuarioRepository.save(usuario);
 
-        return new CreateUserResponseDTO(usuario.getId(), usuario.getUsername(),
-                usuario.getRol(), usuario.isActivo());
+        return new CreateUserResponseDTO(guardado.getId(), guardado.getUsername(),
+                guardado.getRol(), guardado.isActivo());
     }
 
 }
